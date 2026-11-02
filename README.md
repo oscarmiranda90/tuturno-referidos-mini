@@ -1,15 +1,16 @@
-# Tu Turno · Referrals mini app
+# Tu Turno · Mini app de referidos
 
-Standalone Expo SDK 57 reference package for the Maracay team. It contains only
-the referral UI, a minimal Home, the review entry, and the assets/supporting code
-needed to reproduce the approved screens. It has its own Git history and does
-not require the full Tu Turno repository, an account, API credentials or a backend.
+Proyecto independiente con Expo SDK 57 para el equipo de Maracay. Incluye únicamente
+las pantallas de referidos, un Home mínimo, la entrada desde la solicitud de reseña
+y los recursos necesarios para reproducir los diseños aprobados. Tiene un historial
+Git propio y funciona sin el repositorio completo de Tu Turno, una cuenta,
+credenciales de API ni un backend.
 
-## What to run
+## Instalación y ejecución
 
-Requirements: Node.js **22.13 or newer**, npm, and **Expo Go compatible with SDK 57**.
-The latest Expo Go in a store may target a different SDK: install the matching
-client from [Expo Go downloads](https://expo.dev/go?sdkVersion=57).
+Requisitos: Node.js **22.13 o posterior**, npm y **Expo Go compatible con SDK 57**.
+La versión más reciente de Expo Go en la tienda puede corresponder a otro SDK.
+Descarga el cliente compatible desde [Expo Go](https://expo.dev/go?sdkVersion=57).
 
 ```sh
 npm ci
@@ -17,94 +18,108 @@ npm run check
 npm start
 ```
 
-Scan the QR code on a physical phone on the same network, or press `a` for a
-booted Android emulator and `i` for an iOS simulator on macOS with Xcode.
+Escanea el QR desde un teléfono conectado a la misma red. También puedes pulsar
+`a` para abrir un emulador Android encendido o `i` para un simulador iOS en macOS
+con Xcode.
 
 ```sh
 npm run android
 npm run ios
 ```
 
-These scripts use Expo Go; they do not require generating native projects.
-For an isolated Metro instance alongside the full application:
+Estos comandos usan Expo Go y no requieren generar proyectos nativos. Para
+trabajar junto a la app completa usando otro puerto de Metro:
 
 ```sh
 npm start -- --port 8083
 ```
 
-All demo screens use light appearance. Outfit fonts, transparent animated Tutu
-artwork, static Tutu poster, official Club medals and brand imagery are bundled.
-Native PNG generation/sharing should be checked on Android/iOS; the web fallback
-shares text and the link instead of an image attachment.
+Todas las pantallas de demostración usan modo claro. Se incluyen la tipografía
+Outfit, las animaciones de Tutu con fondo transparente, su imagen estática, las
+medallas oficiales del Club y los recursos de marca.
 
-## The two entry flows
+La generación y el envío del PNG se deben probar en Android o iOS. En la versión
+web, el botón comparte el texto y el enlace.
 
-| Entry | Current sequence | Return |
+## Las dos maneras de entrar al flujo
+
+| Entrada | Recorrido actual | Regreso |
 | --- | --- | --- |
-| Home | Empty Home → **Invitar** button → **Invitar** / **Mis referidos** | Close/back returns to Home |
-| Review requested by the host app | Review interaction → **Invitar** / **Mis referidos** | Close/back returns to Home |
+| Desde Home | Home vacío → botón **Invitar** → **Invitar** / **Mis referidos** | Cerrar o volver regresa a Home |
+| Desde una solicitud de reseña de la app | Interacción de reseña → **Invitar** / **Mis referidos** | Cerrar o volver regresa a Home |
 
-**Invitar is always the first tab; Mis referidos is the second.** The chips at
-the top, dots above the WhatsApp button and horizontal swipe drive the same pager.
-Opening from Home bypasses review entirely, including when referrals already exist.
+**Invitar siempre es la primera pestaña; Mis referidos es la segunda.** El selector
+doble superior, los indicadores sobre el botón de WhatsApp y el deslizamiento
+horizontal controlan las mismas páginas.
 
-### 1. Entry from Home
+La entrada desde Home abre directamente **Invitar**, sin pedir una reseña, incluso
+si el usuario ya tiene referidos.
 
-The default launch displays an intentionally empty white Home with one **Invitar**
-button. This is a host shell, not a copy of the production Home. Tap the button
-to enter the approved invitation/referral screens.
+### 1. Entrada desde Home
 
-### 2. Entry from a review request
+Al iniciar normalmente aparece un Home vacío con un único botón **Invitar**. Es una
+pantalla mínima para demostrar la integración. Al tocar el botón se abren las
+pantallas aprobadas de invitación y referidos.
 
-**The current Tu Turno application has no payday / received-payout screen.**
-This package therefore starts this entry **at the review request**, without a
-payout celebration, receipt, money transfer or payment confirmation screen.
+### 2. Entrada desde la solicitud de reseña
 
-For a deterministic demo, start Metro with:
+**La versión actual de Tu Turno no tiene una pantalla de día de cobro.** Por eso,
+esta entrada comienza **desde donde se solicita la reseña**, sin pasar por una
+celebración de cobro, un comprobante, una transferencia o una confirmación de pago.
+
+Para probar una reseña simulada de forma reproducible:
 
 ```sh
 npm run start:review
-# Optional separate port:
+# Opcional: usar un puerto separado.
 npm run start:review -- --port 8083
 ```
 
-Alternatively, open a running project using the development entry URL:
+También puedes abrir el proyecto que ya está ejecutándose mediante esta URL de
+prueba:
 
 ```text
 exp://<metro-host>:8083/--/?entry=review
 ```
 
-The demo review shows **Simulación de reseña**. Choose stars and tap **Simular envío de reseña**, or tap **Omitir reseña**. Both continue to **Invitar**, regardless
-of the selected rating. This screen is explicitly a simulation and does not
-publish any rating to a store. There is no extra review button on Home.
+Sustituye `<metro-host>` por la dirección de Metro que aparece en tu terminal.
 
-To exercise the actual native store request:
+La pantalla **Simulación de reseña** permite elegir estrellas y tocar **Simular
+envío de reseña**, o tocar **Omitir reseña**. Ambas opciones continúan a **Invitar**,
+independientemente de la calificación elegida. La simulación no publica ninguna
+calificación en una tienda. Home conserva únicamente su botón de invitar.
+
+Para intentar la solicitud nativa de la tienda:
 
 ```text
 exp://<metro-host>:8083/--/?entry=review&mode=native
 ```
 
-The interactive demo also has **Intentar reseña nativa**. `expo-store-review`
-checks availability before making the request. The store may suppress its dialog
-because of quotas, environment or user history. Unsupported and failed requests
-still continue to the invitation; no rating or positive review is required.
-Neither platform reports that a rating was submitted. Android can report flow
-completion; iOS StoreKit only acknowledges the request, so it cannot guarantee
-that the invitation waits until a visible review dialog closes.
+La simulación también ofrece **Intentar reseña nativa**. `expo-store-review` verifica
+la disponibilidad antes de solicitarla. La tienda puede no mostrar el diálogo por
+sus límites, el entorno de ejecución o el historial del usuario. Si la solicitud
+no está disponible o falla, el flujo continúa a la invitación. No se exige enviar
+una reseña ni dar una calificación positiva.
 
-In the future, when Tu Turno adds its payday / received-payout screen, that screen
-can trigger this same review entry:
+Ninguna plataforma informa si se envió una calificación. Android puede indicar que
+terminó el flujo nativo; en iOS, StoreKit solo confirma que se hizo la solicitud.
+Por ello, iOS no permite garantizar que la invitación espere hasta que se cierre
+un diálogo de reseña visible.
+
+A futuro, cuando Tu Turno incorpore la pantalla de día de cobro, esa pantalla podrá
+activar esta misma entrada:
 
 ```text
-Future: received payout → review request → Invitar → Mis referidos
-Today:                   review request → Invitar → Mis referidos
+Futuro: día de cobro → solicitud de reseña → Invitar → Mis referidos
+Actual:               solicitud de reseña → Invitar → Mis referidos
 ```
 
-Do not add a fake received-payout prerequisite to the current integration.
+La integración actual comienza en la solicitud de reseña y no requiere simular un
+cobro previo.
 
-### Android emulator shortcuts
+### Accesos para el emulador Android
 
-With Metro on port 8083 and one emulator booted:
+Con Metro en el puerto 8083 y un emulador encendido:
 
 ```sh
 adb reverse tcp:8083 tcp:8083
@@ -113,105 +128,119 @@ adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?e
 adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?entry=review&mode=native" host.exp.exponent'
 ```
 
-Other capture shortcuts: `?entry=invite` and `?entry=referrals`. In a development
-build the registered scheme also accepts `tuturnoreferidos://review`,
-`tuturnoreferidos://review?mode=native`, `tuturnoreferidos://invite` and
-`tuturnoreferidos://home`. Expo Go uses the `exp://` project URLs above.
+Para capturas directas también existen `?entry=invite` y `?entry=referrals`.
+En una compilación de desarrollo, el esquema registrado acepta
+`tuturnoreferidos://review`, `tuturnoreferidos://review?mode=native`,
+`tuturnoreferidos://invite` y `tuturnoreferidos://home`.
+En Expo Go se usan las URL `exp://` del proyecto.
 
-## “Mira cómo voy” is an attachment, not an app screen
+## La imagen «Mira cómo voy»
 
-The card has **no route, full-screen preview, modal or animation**. The small
-phone image in step two is an instructional illustration, not a navigation button.
+La tarjeta es una imagen adjunta para compartir. **No tiene ruta, vista ampliada,
+modal ni animación dentro de la app.** El teléfono pequeño del segundo paso es una
+ilustración explicativa.
 
-When sharing, the app captures the static 9:16 template as a **1080 × 1920 PNG**
-and supplies it to the native share action together with the invitation message
-and referral link. The user chooses WhatsApp and recipients. Nothing is sent
-silently. Every share captures the current profile; it does not reuse another
-user's saved card.
+Al compartir, la app convierte la plantilla estática de proporción 9:16 en un
+**PNG de 1080 × 1920** y lo entrega al selector nativo junto con el mensaje de
+invitación y el enlace de referido. El usuario elige WhatsApp y los destinatarios.
+Cada acción genera la imagen con el perfil actual; no reutiliza la tarjeta de
+otra persona.
 
-The card reads the user's full name, **confirmed SAN payouts received** and stored
-Club tier. “Ya cobré · 7 · San” is a received-payout counter: it is neither invited
-friends, paid installments nor a Club streak. The official medal follows the
-profile's tier. Tutu in this image uses a static PNG poster; the in-app mascot
-and confetti remain animated and honor reduced motion.
+La tarjeta muestra el nombre completo, la cantidad de **SAN cobrados confirmados**
+y el nivel del Club guardado en el perfil. «Ya cobré · 7 · San» cuenta cobros
+recibidos: no cuenta amigos invitados, cuotas pagadas ni la racha del Club.
+La medalla oficial corresponde al nivel del usuario.
 
-- **iOS:** `Share.share` receives the PNG file URL and text/link.
-- **Android:** `expo-sharing` shares the PNG; text/link are copied for the user to
-  paste as a WhatsApp caption. This path does **not** automatically attach a
-  caption together with the image. If production requires a single combined
-  image+caption intent, implement that native transport in a development build.
-- **Copy link:** copies the referral URL only, without generating/sending a PNG.
+Tutu usa una imagen PNG fija en la tarjeta compartida. Dentro de la pantalla de
+invitación, Tutu y el confeti conservan sus animaciones y respetan la preferencia
+de reducir movimiento.
 
-The app does not claim delivery merely because a share sheet opened. Verify
-actual image/caption/link behavior with WhatsApp installed on a physical phone.
-The referral URL is an illustrative Tu Turno URL; this package does not host its
-landing page, attribution resolver or registration flow.
+- **iOS:** `Share.share` recibe la URL del archivo PNG y el texto con el enlace.
+- **Android:** `expo-sharing` comparte el PNG y copia el texto con el enlace para
+  que el usuario lo pegue como descripción en WhatsApp. Esta implementación no
+  adjunta automáticamente la descripción junto con la imagen. Si producción
+  necesita un envío combinado de imagen y descripción, se debe implementar ese
+  transporte nativo en una compilación de desarrollo.
+- **Copiar link:** copia únicamente la URL de referido, sin generar ni enviar un PNG.
 
-## Demo data and production integration
+Abrir el selector para compartir no confirma la entrega. Hay que verificar la
+imagen, el texto y el enlace con WhatsApp instalado en un teléfono físico.
+El enlace es una URL ilustrativa de Tu Turno; este proyecto no incluye su página
+de destino, el procesamiento de atribución ni el registro del invitado.
 
-The reproducible sample is **Pedro Pérez**, **7** received SAN payouts,
-**Diamante**, seven referred friends, five paid first installments, two
-**Pendiente** entries and a **15$** earned total. All identities/payment details
-are synthetic. No bank payout occurs and no financial operation is implemented.
+## Datos de ejemplo e integración con Tu Turno
 
-1. Supply the current session profile to `ReferralsScreen` (`user` prop):
-   `firstName`, `lastName`, `collectedSanes`, `club.points.tier` and identity fields.
-   `invitationProfile` ensures session values override the sample profile.
-2. Replace the synthetic `ReferralProvider` and `demo/data.json` with the host's
-   authenticated data source. Replace the hard-coded demo user lookup inside
-   the provider/UI when wiring the real account. Do not ship the sample code or
-   ledger as a production fallback.
-3. Supply referral code, country configuration, reward amounts, eligibility and
-   first-payment summary from the existing backend. `ReferralsService.getSummary`
-   documents the optional ledger read contract. The backend owns attribution,
-   fraud controls, payment qualification and reward dispatch.
-4. Call `reviewThenInvite(requestNativeReview, openInvitation)` from the existing
-   review trigger. Home calls `openInvitation` directly. Preserve the app's
-   existing deduplication/frequency policy; this isolated UI demo intentionally
-   allows repeated manual tests.
-5. Preserve the approved wording and illustrations; connect data without
-   inventing customer-facing reward statuses. The ledger shows paid vs
-   **Pendiente**; its total sums earned first-payment rewards, not bank dispatches.
+La muestra reproducible utiliza **Pedro Pérez**, **7** SAN cobrados, nivel
+**Diamante**, siete referidos, cinco primeras cuotas pagadas, dos filas
+**Pendiente** y un total ganado de **15$**. Las identidades y los datos de pago son
+ficticios. El proyecto no realiza pagos bancarios ni operaciones financieras.
 
-No original Expo account, EAS project ID, update URL or Git remote is carried
-over. Native app IDs and the URL scheme identify this standalone demo. There are
-no environment secrets to configure. Publication of a production build is outside
-this package's scope.
+Para integrar estas pantallas:
 
-## File map
+1. Entrega el perfil de la sesión a `ReferralsScreen` mediante la propiedad `user`:
+   `firstName`, `lastName`, `collectedSanes`, `club.points.tier` y los campos de
+   identidad. `invitationProfile` hace que los datos de la sesión reemplacen los
+   valores de ejemplo.
+2. Sustituye los datos ficticios de `ReferralProvider` y `demo/data.json` por la
+   fuente autenticada de la app. Reemplaza también la búsqueda del usuario de
+   demostración dentro del proveedor y la interfaz. Los datos de muestra no deben
+   usarse como respaldo en producción.
+3. Obtén del backend existente el código de referido, la configuración del país,
+   los premios, la elegibilidad y el resumen de primeras cuotas pagadas.
+   `ReferralsService.getSummary` documenta el contrato opcional de lectura del
+   listado. El backend conserva la responsabilidad de la atribución, los controles
+   de fraude, la confirmación de pagos y el envío de premios.
+4. Ejecuta `reviewThenInvite(requestNativeReview, openInvitation)` desde el punto
+   donde la app actual solicita la reseña. Desde Home se llama directamente a
+   `openInvitation`. Conserva la política de frecuencia y prevención de duplicados
+   de Tu Turno; esta demostración permite repetir las pruebas manualmente.
+5. Conserva los textos y las ilustraciones aprobados. Conecta los datos sin añadir
+   estados visibles de premios. El listado distingue entre quienes pagaron y
+   quienes están **Pendiente**; el total suma los premios ganados por la primera
+   cuota, independientemente de su posterior envío bancario.
+
+Este proyecto no incorpora la cuenta Expo, el identificador EAS, la URL de
+actualizaciones ni el remoto Git de la app original. Sus identificadores nativos
+y esquema de URL son propios de esta demostración. No necesita secretos de
+entorno. La publicación de una versión de producción queda fuera de su alcance.
+
+## Organización del código
 
 ```text
-App.tsx                              Providers + light appearance
-src/app/MiniApp.tsx                  Home/review/referral entry coordination
-src/app/entry.ts                     Development entry URL parsing
-src/features/home/screens/           Empty Home, one invite button
-src/features/referrals/screens/      Approved pager + review simulation
-src/features/referrals/components/   Invitation, ledger, static card, motion, controls
-src/features/referrals/domain/       Read-only UI helpers, profile projection, review sequence
-src/features/referrals/demo/         Synthetic reference fixtures
-src/features/referrals/services/     Native review + optional ledger read contract
-src/features/referrals/state/        Demo provider boundary
-src/features/club/components/        Official static medal renderer only
-src/shared/                         Minimal profile, typography, theme, money, Tutu/UI
-assets/                             Only referenced brand, mascot and medal files
+App.tsx                              Proveedores y modo claro
+src/app/MiniApp.tsx                  Coordinación de entradas desde Home y reseña
+src/app/entry.ts                     Lectura de las URL de prueba
+src/features/home/screens/           Home vacío con el botón Invitar
+src/features/referrals/screens/      Páginas aprobadas y simulación de reseña
+src/features/referrals/components/   Invitación, listado, tarjeta, animaciones y controles
+src/features/referrals/domain/       Lecturas, perfil y secuencia de reseña
+src/features/referrals/demo/         Datos ficticios de referencia
+src/features/referrals/services/     Reseña nativa y contrato de lectura del listado
+src/features/referrals/state/        Proveedor de datos de demostración
+src/features/club/components/        Componente de medallas oficiales
+src/shared/                         Perfil mínimo, tipografía, tema, montos, Tutu y UI
+assets/                             Recursos de marca, Tutu y medallas utilizados
 ```
 
-There is no login, registration, full production Home, Club screen, payment
-checkout, payout-day screen, admin panel, backend or full-app Git history.
+No se incluyen login, registro, Home completo de producción, pantalla del Club,
+flujo de pagos, pantalla de día de cobro, administración, backend ni el historial
+Git de la app completa.
 
-## Verification and acceptance
+## Verificación y pruebas de integración
 
 ```sh
 npm run format
 npm run check
 ```
 
-`check` runs TypeScript, import/asset reachability and cycles, formatting, neutral
-Spanish UI guard, and focused tests covering review success/failure/wait ordering,
-entry routes, the reference ledger and personalized card fields.
+`check` ejecuta TypeScript, la revisión de imports y recursos, la detección de
+ciclos, el formato, la validación de español neutro y las pruebas del flujo de
+reseña, las rutas de entrada, los datos del listado y el perfil de la tarjeta.
 
-Before integrating into Tu Turno, check both entry flows on Android and iOS,
-chips/dots/swiping, reduced motion, all four medal tiers, long names, PNG contents,
-clipboard, unavailable native review, and actual WhatsApp recipient delivery.
-Do not treat a simulated review as a submitted store rating or a shared image as
-a confirmed referral/payment.
+Antes de integrar en Tu Turno, verifica ambas entradas en Android e iOS, el
+selector, los indicadores, el deslizamiento, la reducción de movimiento, los
+cuatro niveles de medallas, nombres largos, el contenido del PNG, el portapapeles,
+la reseña nativa no disponible y la entrega real mediante WhatsApp.
+
+Una reseña simulada no equivale a una calificación publicada en la tienda, y una
+imagen compartida no confirma un referido ni un pago.
