@@ -10,12 +10,17 @@ un texto listo para copiar y pegar.
 
 ## Mira el recorrido
 
-Video de una versión anterior, útil como referencia visual de la imagen al
-compartir. En ese video todavía aparecen pestañas después de la reseña. **La
-versión actual usa la invitación sola en esa entrada**, como indica el mapa 2.
-La reseña del video es una simulación de prueba.
+Grabación actual de la app en Android. Muestra dos pruebas seguidas:
 
-<img src="docs/media/flujo-referidos.gif" alt="Recorrido de referidos: reseña, pestañas de invitación y referidos, e imagen para compartir" width="360" />
+1. **Desde Home:** Invitar, Mis referidos y la imagen para compartir, con chips,
+   puntos y deslizamiento.
+2. **Después de la reseña:** invitación sola, sin chips, sin puntos y sin cambio
+   de página al deslizar; luego se genera la misma imagen para compartir.
+
+La reseña mostrada es una simulación de prueba. El cambio entre las dos pruebas
+corresponde a entradas independientes, como explican los mapas de abajo.
+
+<img src="docs/media/flujo-referidos.gif?v=2" alt="Dos modos actuales: desde Home con pestañas y después de la reseña con invitación sola, ambos con imagen para compartir" width="360" />
 
 [Ver o descargar el video en MP4](docs/media/flujo-referidos.mp4).
 
