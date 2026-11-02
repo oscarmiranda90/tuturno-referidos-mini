@@ -1,5 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { darkTheme, lightTheme, type Theme } from './colors';
 
@@ -42,11 +50,13 @@ const ThemeContext = createContext<ThemeContextValue>({
  */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [appearance, setAppearanceState] = useState<Appearance>(DEFAULT_APPEARANCE);
+  const selected = useRef(false);
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((stored) => {
-        if (stored === 'light' || stored === 'dark') setAppearanceState(stored);
+        if (!selected.current && (stored === 'light' || stored === 'dark'))
+          setAppearanceState(stored);
       })
       // A missing or unreadable preference is not an error worth surfacing:
       // the default is a perfectly good answer.
@@ -54,11 +64,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setAppearance = useCallback((next: Appearance) => {
+    selected.current = true;
     setAppearanceState(next);
     AsyncStorage.setItem(STORAGE_KEY, next).catch(() => {});
   }, []);
 
   const toggleAppearance = useCallback(() => {
+    selected.current = true;
     setAppearanceState((current) => {
       const next = current === 'light' ? 'dark' : 'light';
       AsyncStorage.setItem(STORAGE_KEY, next).catch(() => {});
@@ -89,7 +101,7 @@ export function ThemeOverride({
 }) {
   const parent = useContext(ThemeContext);
   const value = useMemo<ThemeContextValue>(
-    () => ({ ...parent, theme: appearance === 'dark' ? darkTheme : lightTheme }),
+    () => ({ ...parent, appearance, theme: appearance === 'dark' ? darkTheme : lightTheme }),
     [parent, appearance],
   );
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

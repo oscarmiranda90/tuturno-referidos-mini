@@ -6,7 +6,6 @@ export interface ReferralConfig {
   country: Country;
   referrerAmount: number;
   inviteeAmount: number;
-  validityDays: number;
   weeklyAlertThreshold: number;
   payoutMethod: 'automatic' | 'manual';
   active: boolean;
@@ -36,8 +35,7 @@ export interface Attribution {
   code: string;
   referrerId: string;
   openedAt: string;
-  expiresAt: string;
-  /** Frozen at link opening, including country, amounts and validity. */
+  /** Frozen at link opening, including country and amounts. No expiration. */
   config: ReferralConfig;
 }
 export interface Referral {
@@ -97,8 +95,7 @@ export interface ReferralSummary {
     registeredAt?: string;
     email?: string;
     avatarUrl?: string;
-    status: 'registered' | 'qualified' | 'sent' | 'expired';
-    daysLeft: number;
+    status: 'registered' | 'qualified' | 'sent';
     amount: number;
   }>;
 }

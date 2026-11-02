@@ -17,12 +17,28 @@ export function entryFromUrl(url: string): Entry | null {
 }
 
 /** The entry keeps its presentation even after the store dialog is no longer visible. */
-export function referralPresentation(entry: Entry): {
+export function referralPresentation(
+  entry: Entry,
+  hasInvitees = false,
+): {
   mode: 'home' | 'post-review';
   initialPage: 0 | 1;
 } {
   return {
     mode: entry === 'post-review-invite' ? 'post-review' : 'home',
-    initialPage: entry === 'referrals' ? 1 : 0,
+    initialPage: entry === 'post-review-invite' ? 0 : entry === 'referrals' || hasInvitees ? 1 : 0,
   };
+}
+
+/** Demo-only switches keep test controls out of the product's Home screen. */
+export function demoOptionsFromUrl(url: string) {
+  const params = new URL(url).searchParams;
+  const appearance = params.get('appearance');
+  const country = params.get('country');
+  const empty = params.get('empty');
+  return {
+    appearance: appearance === 'light' || appearance === 'dark' ? appearance : null,
+    country: country === 'VE' || country === 'CO' ? country : null,
+    empty: empty === '1' ? true : empty === '0' ? false : null,
+  } as const;
 }

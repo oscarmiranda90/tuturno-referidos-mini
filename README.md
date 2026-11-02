@@ -12,49 +12,64 @@ un texto listo para copiar y pegar.
 
 Hay **dos entradas al mismo contenido, con navegación diferente**:
 
-1. La persona toca **Invitar** desde Home.
+1. La persona toca **Invitar** desde Home: si ya tiene algún invitado, abre
+   **Mis referidos**; si no tiene ninguno, abre **Invitar**.
 2. La app solicita una **reseña** y después abre **Invitar sin pestañas**.
 
 | Desde dónde entras | Qué aparece | Cómo navegas |
 | --- | --- | --- |
-| Home → Invitar | **Invitar** primero y **Mis referidos** segundo | Chips superiores, puntos y deslizamiento |
+| Home, sin invitados | **Invitar** | Chips superiores, puntos y deslizamiento |
+| Home, con al menos un invitado pagado o pendiente | **Mis referidos** | Las mismas dos pestañas y controles |
 | Después de la reseña | Solo **Invitar** | Sin chips, sin puntos y sin deslizamiento entre páginas |
 
 Se reutilizan el mismo contenido y la misma lógica de compartir en ambos modos.
 La imagen **«Mira cómo voy» se genera para compartir por WhatsApp**. No es otra
-pantalla por la que el usuario deba pasar.
+pantalla por la que el usuario deba pasar. La lupita del paso 2 permite verla
+en grande, de forma opcional, y cerrarla con la X para volver a Invitar.
+
+**Imagen + comentario con texto y enlace es un requisito en Android y iPhone.**
+No se debe pedir al usuario que pegue el enlace a mano. Los links, los invitados
+pendientes y los premios **no vencen**. «Por tiempo limitado» se refiere al
+programa, no a una cuenta regresiva individual.
 
 ## Mapita 1: entrada desde Home
 
 ```mermaid
 flowchart TD
-    H["Home: solo el botón Invitar"] -->|Toca Invitar| I["Pestaña 1: Invitar"]
+    H["Home: solo el botón Invitar"] -->|Toca Invitar| C{"¿Tiene algún invitado?"}
+    C -->|No| I["Pestaña 1: Invitar"]
+    C -->|Sí: pagado o pendiente| R["Pestaña 2: Mis referidos"]
     I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
-    I -->|Invitar por WhatsApp| G["La app genera el PNG con los datos del usuario"]
+    I -->|Lupita del paso 2| P["Tarjeta estática en pantalla completa"]
+    P -->|Cerrar con X| I
+    I -->|Invitar por WhatsApp| G["Generar PNG y comentario con texto y link"]
     R -->|Invitar a más amigos| G
-    G --> S["Se abre el selector para compartir del teléfono"]
+    G --> S["Selector del teléfono: imagen y comentario juntos"]
     S -->|Elige WhatsApp| W["WhatsApp: el usuario elige a quién enviarlo"]
     S -->|Cancela| V["Permanece en la pestaña desde la que compartió"]
     I -->|Cerrar| H
     R -->|Volver| H
 ```
 
-Grabación de este recorrido en Android: desde Home se abre **Invitar**, se cambia
-a **Mis referidos** y se genera la imagen para compartir. Incluye chips, puntos
-y deslizamiento.
+El recorrido de Home conserva las dos pestañas. La página que se abre depende
+de si ya hay invitados; la muestra de Pedro tiene siete, por eso empieza en
+**Mis referidos**. La vista ampliada se abre desde la lupita de **Invitar**.
 
-<img src="docs/media/flujo-home.gif" alt="Desde Home: Invitar y Mis referidos con pestañas, y generación de la imagen para compartir" width="360" />
+<img src="docs/media/flujo-home.gif?v=3" alt="Desde Home con invitados: Mis referidos, cambio a Invitar y tarjeta ampliada" width="360" />
 
 [Ver o descargar el video de Home en MP4](docs/media/flujo-home.mp4).
 
 **Qué debes observar al probarlo:**
 
-- Desde Home se abre **Invitar** directamente, sin pedir una reseña.
+- Desde Home no se pide una reseña.
+- Sin invitados se abre **Invitar**; con uno o más, pagados o pendientes, **Mis referidos**.
+- El orden del selector no cambia: Invitar a la izquierda, Mis referidos a la derecha.
 - Puedes cambiar de pestaña tocando los chips, los puntos o deslizando.
 - **Mis referidos** muestra quién pagó, quién está **Pendiente** y el total ganado.
 - Los botones verdes de ambas pestañas comparten la misma tarjeta y el enlace.
 - **Copiar link** solo copia el enlace; no abre WhatsApp ni genera la imagen.
-- Generar el PNG es un paso interno: no aparece una pantalla extra.
+- La lupita abre la tarjeta estática en pantalla completa; la X vuelve a Invitar.
+- Compartir no exige abrir esa vista previa y envía PNG, comentario y enlace juntos.
 
 ## Mapita 2: entrada desde la reseña
 
@@ -64,7 +79,9 @@ flowchart TD
     E["Hoy: la app llega al punto donde solicita una reseña"] --> Q["Solicitud de reseña"]
     Q -->|Termina la interacción| I["Invitar: sin chips, puntos ni deslizamiento"]
     Q -->|Se omite, no aparece o falla| I
-    I -->|Invitar por WhatsApp| G["Generar imagen personalizada y abrir el selector para compartir"]
+    I -->|Lupita| P["Tarjeta estática en grande"]
+    P -->|X| I
+    I -->|Invitar por WhatsApp| G["Generar PNG y comentario con link; abrir selector"]
     I -->|Cerrar| H["Home"]
 ```
 
@@ -72,7 +89,7 @@ Grabación de este recorrido en Android: después de la **simulación de reseña
 se abre la invitación sola, sin chips, sin puntos y sin cambio de página al
 deslizar. También se muestra la generación de la imagen para compartir.
 
-<img src="docs/media/flujo-resena.gif" alt="Después de la reseña: invitación sola sin pestañas ni deslizamiento, y generación de la imagen para compartir" width="360" />
+<img src="docs/media/flujo-resena.gif?v=3" alt="Después de la reseña: invitación sola sin pestañas ni deslizamiento, y generación de la imagen para compartir" width="360" />
 
 [Ver o descargar el video de la reseña en MP4](docs/media/flujo-resena.mp4).
 
@@ -93,52 +110,60 @@ reseña; no se debe inventar esa confirmación. Los detalles están al final.
 
 ## Cómo abrir la muestra en tu computadora
 
-Necesitas **Git**, **Node.js 22.13 o posterior** y **Expo Go para SDK 57**.
-Si te falta alguno, pide ayuda para instalarlo antes de continuar.
+Necesitas **Git**, **Node.js 22.13 o posterior** y las herramientas de Android o
+Xcode para iOS. En Android usa **JDK 17** para Gradle; el JDK 25 incluido en
+algunas versiones de Android Studio puede fallar al configurar CMake. Pide ayuda
+para instalar las herramientas si es tu primera compilación.
 
-1. Abre una terminal en la carpeta donde guardas tus proyectos.
-2. Descarga este repositorio y entra en su carpeta:
+1. Descarga el proyecto:
 
    ```sh
    git clone https://github.com/oscarmiranda90/tuturno-referidos-mini.git
    cd tuturno-referidos-mini
-   ```
-
-3. Instala lo que necesita y revisa que esté bien:
-
-   ```sh
    npm ci
    npm run check
    ```
 
-   `npm ci` instala las dependencias. `npm run check` revisa el código y ejecuta
-   las pruebas. Si aparece un error, conserva el mensaje completo y pídele a tu
-   agente que lo revise antes de seguir.
+2. Crea e instala la **compilación de desarrollo** en tu dispositivo o simulador:
 
-4. Abre la muestra:
+   ```sh
+   npm run android
+   ```
+
+   En una Mac con Xcode, para iOS:
+
+   ```sh
+   npm run ios -- --device
+   ```
+
+   Es una app de prueba propia: incluye `react-native-share`, la pieza nativa que
+   entrega imagen y comentario juntos. La primera compilación tarda más porque
+   descarga y compila dependencias. No necesitas publicar en las tiendas.
+   Un iPhone físico necesita la firma de desarrollo de tu equipo.
+
+3. En los siguientes arranques, abre esa app de desarrollo y ejecuta:
 
    ```sh
    npm start
    ```
 
-   Verás un QR. Escanéalo con Expo Go desde un teléfono en la misma red.
-   También puedes pulsar `a` si tienes un emulador Android encendido o `i` para
-   un simulador iOS en una Mac con Xcode.
+   Si el comando del paso 2 ya dejó Metro abierto, usa esa terminal.
 
-5. Para probar la otra entrada, detén Metro con `Ctrl+C` y ejecuta:
+4. Para comenzar por la reseña simulada, detén Metro y ejecuta:
 
    ```sh
    npm run start:review
    ```
 
-   Abre o recarga el proyecto en Expo Go. Prueba **Omitir reseña** y luego, en
-   otra prueba, elige estrellas y toca **Simular envío de reseña**. En ambos casos
-   debes llegar a **Invitar sin chips, sin puntos y sin deslizamiento**.
-   Cierra y entra desde Home para comprobar que allí sí aparecen las dos pestañas.
+   Prueba **Omitir reseña** y **Simular envío de reseña**: ambas opciones llevan a
+   **Invitar sin chips, puntos ni deslizamiento**. Al cerrar y entrar desde Home,
+   vuelven las dos pestañas y se elige la inicial según los invitados.
 
-Si Expo Go dice que el proyecto es incompatible, descarga la versión para
-**SDK 57** desde [la página de Expo](https://expo.dev/go?sdkVersion=57).
-La generación de la imagen y WhatsApp se prueban en Android o iOS.
+**Expo Go solo sirve para revisar la interfaz**, con `npm run start:go` y un
+cliente compatible con SDK 57. No incluye `react-native-share`: allí el botón no
+comparte la tarjeta. No hay sustitución por una imagen sin comentario ni por texto
+copiado al portapapeles. Para aceptar el envío por WhatsApp usa la compilación de
+desarrollo en Android e iPhone, con WhatsApp instalado.
 
 ## Básicamente: pégame en tu agente, Claude o Codex, y pídele esto
 
@@ -163,8 +188,10 @@ herramientas y navegación. No reemplaces la app completa por la muestra ni
 actualices su framework solo porque la muestra usa Expo SDK 57.
 
 Implementa estas dos entradas:
-1. Desde el botón Invitar del Home real: abrir Invitar como primera pestaña y
-   Mis referidos como segunda, con chips superiores, puntos y deslizamiento.
+1. Desde el botón Invitar del Home real: conservar Invitar como primera pestaña
+   y Mis referidos como segunda, con chips, puntos y deslizamiento. Si existe
+   al menos un invitado (pagado o pendiente), abrir Mis referidos; si no hay
+   ninguno, abrir Invitar.
    No pedir una reseña en esta entrada. El Home vacío del mini repo solo sirve
    para demostrar el botón; conserva el Home de la app real.
 2. Desde donde la app pide una reseña: usar la solicitud nativa existente y
@@ -188,14 +215,26 @@ La muestra los llama mode="home" y mode="post-review".
 - Conserva el confeti animado, Tutu y las medallas oficiales.
 - Mantén los textos aprobados y el estado Pendiente del listado.
 
-Mira cómo voy NO es una pantalla. Al compartir, genera una imagen estática
+Mira cómo voy es una imagen estática para compartir. La miniatura y lupita del
+paso 2 abren una vista previa a pantalla completa con una X para volver a Invitar.
+No se anima, no abre WhatsApp y no es un paso obligatorio al compartir.
+Al compartir, genera una imagen estática
 1080x1920 con el nombre completo, los SAN cobrados confirmados y el nivel real
 del usuario, junto con su enlace de referido. El contador no es la cantidad
 de amigos ni de cuotas pagadas. No dejes el nombre Pedro ni la medalla Diamante
 fijos: son datos de ejemplo. El usuario elige WhatsApp y los destinatarios.
-En Android, revisa la limitación documentada de compartir imagen y descripción:
-la muestra copia el texto/enlace para pegarlo manualmente; no prometas envío
-conjunto automático sin implementar y verificar el transporte necesario.
+En Android y iOS usa react-native-share para entregar PNG y comentario con el
+texto aprobado y el enlace en la MISMA operación. No uses el portapapeles como
+sustituto ni una entrega de imagen sola. Esto requiere una compilación de
+desarrollo; Expo Go solo permite ver la interfaz. Comprueba en WhatsApp que
+el destinatario recibe la imagen con el comentario y el link que puede tocar.
+
+Conserva claro y oscuro en las tres piezas. En la tarjeta oscura: fondo azul,
+logo blanco, globo de Tutu y panel inferior blancos, con texto legible.
+En Colombia usa cadena con 1 y cadenas desde 2. Los links, los pendientes y
+los premios no vencen: no agregues plazos, contadores ni estados de vencimiento.
+Usa el mensaje exacto por país de la sección Mensaje de WhatsApp, con montos
+obtenidos de la configuración.
 
 Conecta la sesión y los servicios que ya existen. No inventes endpoints ni
 confirmaciones de pagos. Si falta un dato o un servicio, separa claramente
@@ -214,15 +253,63 @@ ambos recorridos y la imagen generada con un perfil distinto al de la muestra.
 
 ## Cómo saber si la tarea está lista
 
-- [ ] Desde el Home real, **Invitar** abre la primera pestaña sin pedir reseña.
+- [ ] Desde Home, sin invitados abre **Invitar**, sin pedir reseña.
+- [ ] Desde Home, con al menos un invitado pagado o pendiente abre **Mis referidos**.
 - [ ] Desde la reseña se abre solo **Invitar**, incluso si no se califica.
 - [ ] Después de la reseña no hay chips, puntos ni deslizamiento hacia referidos.
-- [ ] Desde Home, **Mis referidos** queda segunda y las tres formas de cambiar funcionan.
+- [ ] El orden Invitar / Mis referidos y las tres formas de cambiar funcionan.
 - [ ] Al cerrar la invitación sola y volver a entrar desde Home reaparecen las pestañas.
 - [ ] Tutu, las medallas, los textos y el estado **Pendiente** se conservan.
-- [ ] La imagen usa los datos del usuario y no aparece como otra pantalla.
-- [ ] Se probó compartir con WhatsApp en un teléfono y copiar el enlace.
+- [ ] La imagen usa los datos reales del usuario y no es un paso obligatorio.
+- [ ] La lupita abre la tarjeta estática con X; cerrar vuelve a Invitar.
+- [ ] Las tres piezas funcionan en claro y oscuro; Colombia usa los plurales correctos.
+- [ ] No hay vencimientos en datos, tipos, lógica ni estados visibles.
+- [ ] Android e iPhone: el destinatario recibe tarjeta + comentario + enlace juntos.
+- [ ] Hay un video de esa prueba por plataforma y capturas de las tres piezas en ambos modos.
+- [ ] Copiar link sigue copiando solo el enlace.
 - [ ] Los chequeos pasan y queda escrito qué datos o servicios faltan conectar.
+
+## Evidencias y criterio de cierre
+
+**Implementar el envío no demuestra que WhatsApp lo recibió correctamente.**
+Los GIF de los mapitas explican la navegación; no sustituyen los videos de
+aceptación con un destinatario de prueba.
+
+Para cerrar la integración, adjunta:
+
+- Un video en **Android físico**, desde Invitar hasta la recepción en WhatsApp de
+  la imagen con su comentario y el link que se puede tocar.
+- La misma prueba en **iPhone físico**. Comprueba el comentario, no solo la imagen.
+- Capturas de **Invitar, tarjeta y Mis referidos**, en **claro y oscuro**, para
+  Venezuela y Colombia. Revisa también los cuatro niveles y el caso de cero SAN.
+- Prueba de la lupita y la X, Home con cero invitados y Home con al menos un
+  pendiente; después de la reseña debe seguir apareciendo solo Invitar.
+
+### Verificado en esta muestra
+
+- `npm run check`: tipos, estructura, formato, español y pruebas de regresión.
+- Compilaciones nativas y apertura de la app en Android e iOS.
+- PNG exportado: **1080 × 1920** comprobado en los archivos de ambos sistemas.
+- [Selector nativo Android con imagen, texto aprobado y link](docs/screenshots/android-compartir.png).
+- [Selector nativo iOS con el PNG](docs/screenshots/ios-compartir.png). El código
+  entrega el mismo comentario junto con la imagen; la conservación del comentario
+  al recibir en WhatsApp se comprueba en la prueba física pendiente.
+
+### Capturas actuales
+
+Capturas de la compilación de desarrollo en Android; la tarjeta corresponde a
+la vista estática ampliada. Cada enlace abre la imagen completa:
+
+| País y apariencia | Invitar | Tarjeta | Mis referidos |
+| --- | --- | --- | --- |
+| Venezuela · claro | [Ver](docs/screenshots/ve-light-invitar.png) | [Ver](docs/screenshots/ve-light-tarjeta.png) | [Ver](docs/screenshots/ve-light-referidos.png) |
+| Venezuela · oscuro | [Ver](docs/screenshots/ve-dark-invitar.png) | [Ver](docs/screenshots/ve-dark-tarjeta.png) | [Ver](docs/screenshots/ve-dark-referidos.png) |
+| Colombia · claro | [Ver](docs/screenshots/co-light-invitar.png) | [Ver](docs/screenshots/co-light-tarjeta.png) | [Ver](docs/screenshots/co-light-referidos.png) |
+| Colombia · oscuro | [Ver](docs/screenshots/co-dark-invitar.png) | [Ver](docs/screenshots/co-dark-tarjeta.png) | [Ver](docs/screenshots/co-dark-referidos.png) |
+
+**Pendiente de aceptación:** los videos de entrega real por WhatsApp en ambos
+sistemas. No se marcan como aprobados con pruebas unitarias, Expo Go ni solo
+abriendo el selector del teléfono.
 
 ## Palabras que encontrarás
 
@@ -247,38 +334,27 @@ los comandos adicionales, las limitaciones por plataforma o los archivos concret
 
 ## Instalación y ejecución
 
-Requisitos: Node.js **22.13 o posterior**, npm y **Expo Go compatible con SDK 57**.
-La versión más reciente de Expo Go en la tienda puede corresponder a otro SDK.
-Descarga el cliente compatible desde [Expo Go](https://expo.dev/go?sdkVersion=57).
+Los pasos básicos están arriba. `npm run android` y `npm run ios` generan los
+proyectos nativos e instalan la compilación de desarrollo. La configuración ya
+activa el soporte oficial de escenas de Expo SDK 57 para compilar con Xcode 27
+y abrir en iOS 27; conserva el plugin `expo-build-properties` y el parche de Expo
+del lockfile. `npm start` sirve el
+JavaScript a esa app. Después de cambiar módulos nativos o plugins, vuelve a
+compilar. Los proyectos generados `android/` e `ios/` no se publican en este repo.
 
-```sh
-npm ci
-npm run check
-npm start
-```
-
-Escanea el QR desde un teléfono conectado a la misma red. También puedes pulsar
-`a` para abrir un emulador Android encendido o `i` para un simulador iOS en macOS
-con Xcode.
-
-```sh
-npm run android
-npm run ios
-```
-
-Estos comandos usan Expo Go y no requieren generar proyectos nativos. Para
-trabajar junto a la app completa usando otro puerto de Metro:
+Para trabajar junto a la app completa usando otro puerto:
 
 ```sh
 npm start -- --port 8083
 ```
 
-Todas las pantallas de demostración usan modo claro. Se incluyen la tipografía
-Outfit, las animaciones de Tutu con fondo transparente, su imagen estática, las
-medallas oficiales del Club y los recursos de marca.
+Incluye Outfit, Tutu animado y estático, medallas oficiales y marca. Las tres
+piezas admiten claro y oscuro. El proveedor de tema conserva la preferencia;
+la app real debe conectar `useAppearance().setAppearance` con su configuración
+existente. El Home de esta muestra mantiene solo el botón Invitar.
 
-La generación y el envío del PNG se deben probar en Android o iOS. En la versión
-web, el botón comparte el texto y el enlace.
+La web y Expo Go permiten revisar la interfaz. No sirven para aceptar el envío
+combinado: no se ofrece una alternativa incompleta de compartir solo texto o imagen.
 
 ## Las dos maneras de entrar al flujo
 
@@ -292,8 +368,10 @@ El selector doble superior, los puntos y el deslizamiento controlan esas página
 **Después de la reseña**, se muestra únicamente Invitar: no hay selector, puntos
 ni página de referidos accesible mediante deslizamiento.
 
-La entrada desde Home abre directamente **Invitar**, sin pedir una reseña, incluso
-si el usuario ya tiene referidos.
+La entrada desde Home no pide reseña: abre **Mis referidos** si existe cualquier
+invitado, pagado o pendiente, y **Invitar** si no hay ninguno. La elección no usa
+solo el total ganado ni solo los que pagaron. Después de la reseña siempre abre
+Invitar, aunque ya tenga invitados.
 
 ### 1. Entrada desde Home
 
@@ -358,41 +436,59 @@ Actual:               solicitud de reseña → Invitar sin pestañas
 La integración actual comienza en la solicitud de reseña y no requiere simular un
 cobro previo.
 
-### Accesos para el emulador Android
+### Accesos de prueba y variantes
 
-Con Metro en el puerto 8083 y un emulador encendido:
+Con Metro abierto y la compilación de desarrollo instalada:
 
 ```sh
 adb reverse tcp:8083 tcp:8083
-adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?entry=home" host.exp.exponent'
-adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?entry=review" host.exp.exponent'
-adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?entry=review&mode=native" host.exp.exponent'
+adb shell 'am start -a android.intent.action.VIEW -d "tuturnoreferidos://home?country=VE&empty=0&appearance=light" com.tuturno.referidosdemo'
+adb shell 'am start -a android.intent.action.VIEW -d "tuturnoreferidos://review?appearance=dark" com.tuturno.referidosdemo'
 ```
 
-Para capturas directas:
+En el simulador iOS:
 
-- `?entry=invite`: invitación con pestañas, como desde Home.
-- `?entry=referrals`: segunda pestaña del modo Home.
-- `?entry=invite&source=review`: invitación sola, como después de la reseña.
+```sh
+xcrun simctl openurl booted 'tuturnoreferidos://home?country=CO&empty=0&appearance=dark'
+```
 
-La entrada real de prueba sigue siendo `?entry=review` o
-`?entry=review&mode=native`; el acceso directo evita esa interacción solo para capturas.
-En una compilación de desarrollo, el esquema registrado acepta
-`tuturnoreferidos://review`, `tuturnoreferidos://review?mode=native`,
-`tuturnoreferidos://invite` y `tuturnoreferidos://home`.
-En Expo Go se usan las URL `exp://` del proyecto.
+Si la app de desarrollo aún no cargó el proyecto, ábrela y conecta con Metro
+antes de usar esos accesos.
+
+| Parámetro | Qué permite probar |
+| --- | --- |
+| `entry=home` o `tuturnoreferidos://home` | Home con su botón; permite comprobar la selección inicial |
+| `entry=invite` o `tuturnoreferidos://invite` | Entrada de Home: elige página según los invitados |
+| `entry=referrals` | Fuerza el listado para capturas, incluso vacío |
+| `entry=review` o `tuturnoreferidos://review` | Reseña simulada seguida de invitación sola |
+| `entry=review&mode=native` | Intenta la reseña nativa y sigue a invitación sola |
+| `entry=invite&source=review` | Acceso directo a invitación sola, para capturas |
+| `appearance=light` / `appearance=dark` | Cambia y guarda la apariencia de prueba |
+| `country=VE` / `country=CO` | Carga datos y montos de muestra del país |
+| `empty=1` / `empty=0` | Carga muestra sin invitados / con invitados |
+
+Los parámetros de país y lista vacía son controles de demostración: reinician
+los datos ficticios, nunca datos reales. Sin esos parámetros se conserva el
+escenario cargado. El cambio de apariencia conserva la lista.
+
+En Expo Go, usa `exp://<metro-host>:8083/--/?entry=home&appearance=dark` y los
+mismos parámetros. Para probar las dos entradas con datos vacíos o poblados,
+combina `entry=home` con `empty=1` o `empty=0`, toca Invitar y comprueba la página.
 
 ## La imagen «Mira cómo voy»
 
-La tarjeta es una imagen adjunta para compartir. **No tiene ruta, vista ampliada,
-modal ni animación dentro de la app.** El teléfono pequeño del segundo paso es una
-ilustración explicativa.
+La tarjeta es una imagen adjunta estática. **La miniatura y la lupita del paso 2
+abren una vista ampliada en pantalla completa**, con una X que vuelve a Invitar.
+En Android, el botón Atrás también la cierra. No tiene animación ni es un paso
+obligatorio para compartir; abrirla o cerrarla no inicia ningún envío.
 
 Al compartir, la app convierte la plantilla estática de proporción 9:16 en un
 **PNG de 1080 × 1920** y lo entrega al selector nativo junto con el mensaje de
 invitación y el enlace de referido. El usuario elige WhatsApp y los destinatarios.
 Cada acción genera la imagen con el perfil actual; no reutiliza la tarjeta de
-otra persona.
+otra persona. Antes de capturar espera que terminen de cargar el logo, Tutu y
+la medalla. La vista ampliada también espera los recursos para no mostrar una
+tarjeta incompleta. El PNG final debe medir 1080 × 1920 píxeles en ambos sistemas.
 
 La tarjeta muestra el nombre completo, la cantidad de **SAN cobrados confirmados**
 y el nivel del Club guardado en el perfil. «Ya cobré · 7 · San» cuenta cobros
@@ -403,13 +499,34 @@ Tutu usa una imagen PNG fija en la tarjeta compartida. Dentro de la pantalla de
 invitación, Tutu y el confeti conservan sus animaciones y respetan la preferencia
 de reducir movimiento.
 
-- **iOS:** `Share.share` recibe la URL del archivo PNG y el texto con el enlace.
-- **Android:** `expo-sharing` comparte el PNG y copia el texto con el enlace para
-  que el usuario lo pegue como descripción en WhatsApp. Esta implementación no
-  adjunta automáticamente la descripción junto con la imagen. Si producción
-  necesita un envío combinado de imagen y descripción, se debe implementar ese
-  transporte nativo en una compilación de desarrollo.
-- **Copiar link:** copia únicamente la URL de referido, sin generar ni enviar un PNG.
+- **Android e iOS:** `react-native-share` recibe el PNG y el mensaje con el link
+  en una sola llamada. En Android usa un archivo en caché interna y permisos de
+  lectura temporales, sin pedir acceso al almacenamiento del teléfono.
+- **Cancelación:** cierra el selector sin mostrar un error ni confirmar un envío.
+- **Copiar link:** copia únicamente la URL, sin generar ni enviar un PNG.
+- **Expo Go y web:** no cargan el módulo nativo de compartir ni hacen un envío
+  incompleto. La interfaz se puede revisar; la aceptación requiere una app compilada.
+
+### Mensaje de WhatsApp
+
+Estos son los textos aprobados para el comentario de la imagen. Los montos se
+leen de la configuración de cada país y el enlace pertenece al usuario:
+
+- **Venezuela:** «Entra hoy, gana tus 3$ y arranca con el próximo San. Después
+  invitas tú y ganas 3$ por cada amigo. [link]»
+- **Colombia:** «Entra hoy, gana tus [monto en pesos] y arranca con la próxima
+  cadena. Después invitas tú y ganas [monto en pesos] por cada amigo. [link]»
+
+No se agrega el mensaje anterior ni una instrucción para pegar texto manualmente.
+Imagen y comentario con enlace son un requisito, no una mejora opcional.
+
+### Sin vencimientos
+
+Ni el link, ni el invitado pendiente, ni el premio vencen. Un invitado permanece
+Pendiente hasta que se confirme su primera cuota. No hay `validityDays`,
+`expiresAt`, `daysLeft`, estado `expired` ni filtro por antigüedad en el modelo.
+El historial de fechas solo ordena el listado. El total depende de las primeras
+cuotas confirmadas, no de que Operaciones haya enviado el premio bancario.
 
 Abrir el selector para compartir no confirma la entrega. Hay que verificar la
 imagen, el texto y el enlace con WhatsApp instalado en un teléfono físico.
@@ -443,6 +560,9 @@ Para integrar estas pantallas:
    `openInvitation` en modo Home. En la continuación de la reseña abre el modo
    posterior a reseña. `ReferralsScreen` acepta `mode="home"` o `mode="post-review"`;
    el segundo monta solo `InvitePage`, sin montar el listado ni el paginador.
+   Desde Home pasa `initialPage={1}` si el resumen tiene al menos un invitado,
+   incluyendo Pendiente; pasa `initialPage={0}` si está vacío. El modo posterior
+   a la reseña siempre usa página 0. `MiniApp` muestra esta decisión completa.
    Conserva la política de frecuencia y prevención de duplicados
    de Tu Turno; esta demostración permite repetir las pruebas manualmente.
 5. Conserva los textos y las ilustraciones aprobados. Conecta los datos sin añadir
@@ -458,7 +578,7 @@ entorno. La publicación de una versión de producción queda fuera de su alcanc
 ## Organización del código
 
 ```text
-App.tsx                              Proveedores y modo claro
+App.tsx                              Proveedores; respeta la apariencia elegida
 src/app/MiniApp.tsx                  Coordinación de entradas desde Home y reseña
 src/app/entry.ts                     Lectura de las URL de prueba
 src/features/home/screens/           Home vacío con el botón Invitar
@@ -466,7 +586,7 @@ src/features/referrals/screens/      Páginas aprobadas y simulación de reseña
 src/features/referrals/components/   Invitación, listado, tarjeta, animaciones y controles
 src/features/referrals/domain/       Lecturas, perfil y secuencia de reseña
 src/features/referrals/demo/         Datos ficticios de referencia
-src/features/referrals/services/     Reseña nativa y contrato de lectura del listado
+src/features/referrals/services/     Compartir nativo, reseña y contrato del listado
 src/features/referrals/state/        Proveedor de datos de demostración
 src/features/club/components/        Componente de medallas oficiales
 src/shared/                         Perfil mínimo, tipografía, tema, montos, Tutu y UI
@@ -486,7 +606,9 @@ npm run check
 
 `check` ejecuta TypeScript, la revisión de imports y recursos, la detección de
 ciclos, el formato, la validación de español neutro y las pruebas del flujo de
-reseña, las rutas de entrada, los datos del listado y el perfil de la tarjeta.
+reseña, la selección inicial con y sin invitados, los pendientes sin vencimiento,
+los mensajes por país, el contenido combinado para compartir, los plurales de
+Colombia, los colores de la tarjeta y el perfil personalizado.
 
 Antes de integrar en Tu Turno, verifica ambos modos en Android e iOS: selector,
 puntos y deslizamiento desde Home; ausencia de esos controles y del listado

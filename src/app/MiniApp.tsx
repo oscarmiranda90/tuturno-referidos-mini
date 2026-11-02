@@ -9,14 +9,15 @@ import { reviewThenInvite } from '../features/referrals/domain/reviewSequence';
 import { useReferrals } from '../features/referrals/state/ReferralProvider';
 import type { User } from '../shared/models/types';
 import { Text } from '../shared/ui/Text';
-import { useTheme } from '../shared/theme/index';
-import { entryFromUrl, referralPresentation, type Entry } from './entry';
+import { useAppearance, useTheme } from '../shared/theme/index';
+import { demoOptionsFromUrl, entryFromUrl, referralPresentation, type Entry } from './entry';
 
 export function MiniApp() {
   const [entry, setEntry] = useState<Entry>(
     process.env.EXPO_PUBLIC_DEMO_ENTRY === 'review' ? 'review' : 'home',
   );
-  const { state } = useReferrals();
+  const { state, selectProgramCountry } = useReferrals();
+  const { setAppearance } = useAppearance();
   const theme = useTheme();
   const sample = state.users[0];
   const profile: User = {
@@ -31,7 +32,13 @@ export function MiniApp() {
     let active = true;
     const open = (url: string) => {
       const next = entryFromUrl(url);
-      if (active && next) setEntry(next);
+      if (active && next) {
+        const options = demoOptionsFromUrl(url);
+        if (options.appearance) setAppearance(options.appearance);
+        if (options.country || options.empty !== null)
+          selectProgramCountry(options.country, options.empty ?? false);
+        setEntry(next);
+      }
     };
     void Linking.getInitialURL()
       .then((url) => {
@@ -43,7 +50,7 @@ export function MiniApp() {
       active = false;
       subscription.remove();
     };
-  }, []);
+  }, [selectProgramCountry, setAppearance]);
   useEffect(() => {
     if (entry !== 'native-review') return;
     let active = true;
@@ -56,7 +63,7 @@ export function MiniApp() {
   }, [entry]);
   return (
     <View style={[styles.root, { backgroundColor: theme.surface.canvas }]}>
-      <StatusBar style="dark" />
+      <StatusBar style={theme.mode === 'dark' ? 'light' : 'dark'} />
       {entry === 'home' ? (
         <HomeScreen onInvite={() => setEntry('invite')} />
       ) : entry === 'review' ? (
@@ -72,7 +79,10 @@ export function MiniApp() {
       ) : (
         <ReferralsScreen
           user={profile}
-          {...referralPresentation(entry)}
+          {...referralPresentation(
+            entry,
+            state.referrals.some((referral) => referral.attribution.referrerId === profile.id),
+          )}
           onClose={() => setEntry('home')}
         />
       )}

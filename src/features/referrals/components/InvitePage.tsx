@@ -3,17 +3,15 @@ import { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  Share,
-  Platform,
   PixelRatio,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { captureRef, releaseCapture } from 'react-native-view-shot';
-import * as Sharing from 'expo-sharing';
+import { captureRef } from 'react-native-view-shot';
 import type { User } from '../../../shared/models/types';
 import { referralMoney } from '../../../shared/money';
 import { useTheme } from '../../../shared/theme/index';
@@ -22,10 +20,12 @@ import { TutuMascot } from '../../../shared/ui/TutuMascot';
 import { Reveal } from './Reveal';
 import { InviteConfetti } from './InviteConfetti';
 import { InvitationCard } from './InvitationCard';
+import { InvitationCardPreview } from './InvitationCardPreview';
 import { ReferralIcon, WhatsAppIcon } from './ReferralIcons';
 import { canInvite, referralLink, whatsappMessage } from '../domain/engine';
 import { invitationProfile } from '../domain/invitationProfile';
 import { useReferrals } from '../state/ReferralProvider';
+import { canShareInvitation, shareInvitation } from '../services/shareInvitation';
 
 export interface InvitePageHandle {
   share: () => Promise<void>;
@@ -51,7 +51,12 @@ export function InvitePage({
   const user = invitationProfile(referralUser, profile);
   const config = state.configs[country];
   const [busy, setBusy] = useState(false);
+  const [preview, setPreview] = useState(false);
   const cardRef = useRef<View>(null);
+  const artworkKey = `${country}:${theme.mode}:${user.clubTier}:${user.collectedSanes > 0}`;
+  const artwork = useRef({ key: artworkKey, ready: false, failed: false });
+  if (artwork.current.key !== artworkKey)
+    artwork.current = { key: artworkKey, ready: false, failed: false };
   const [feedback, setFeedback] = useState('');
   const tracked = useRef(false);
   const sharing = useRef(false);
@@ -62,6 +67,9 @@ export function InvitePage({
       mounted.current = false;
     };
   }, []);
+  useEffect(() => {
+    if (!active) setPreview(false);
+  }, [active]);
   useEffect(() => {
     if (active && !tracked.current) {
       tracked.current = true;
@@ -85,39 +93,36 @@ export function InvitePage({
   const message = whatsappMessage(user, config);
   const openWhatsApp = async () => {
     if (sharing.current || !canInvite(user, config)) return;
+    if (!canShareInvitation()) {
+      const message = 'Esta vista de prueba no permite compartir la tarjeta.';
+      setFeedback(message);
+      if (!active) Alert.alert('Compartir tarjeta', message);
+      return;
+    }
     sharing.current = true;
     setFeedback('');
     setBusy(true);
     try {
-      if (Platform.OS === 'web') {
-        await Share.share({ message });
-      } else {
-        const uri = await captureRef(cardRef, {
-          format: 'png',
-          quality: 1,
-          width: 1080 / PixelRatio.get(),
-          height: 1920 / PixelRatio.get(),
-          result: 'tmpfile',
-        });
-        try {
-          if (Platform.OS === 'ios') {
-            await Share.share({ message, url: uri }, { subject: 'Mi invitación a TuTurno' });
-          } else if (await Sharing.isAvailableAsync()) {
-            await Clipboard.setStringAsync(message);
-            if (mounted.current)
-              setFeedback('Texto y link copiados. Pégalos al compartir tu tarjeta.');
-            await Sharing.shareAsync(uri, {
-              mimeType: 'image/png',
-              dialogTitle: 'Compartir mi invitación',
-            });
-          } else if (mounted.current)
-            setFeedback(
-              'No pudimos abrir la ventana para compartir. Copia tu link e intenta de nuevo.',
-            );
-        } finally {
-          releaseCapture(uri);
-        }
+      const started = Date.now();
+      // Never export while the local logo, Tutu or medal is still being decoded.
+      while (!artwork.current.ready) {
+        if (!mounted.current || artwork.current.failed || Date.now() - started > 15000)
+          throw new Error('Card artwork is unavailable');
+        await new Promise<void>((resolve) => setTimeout(resolve, 50));
       }
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      );
+      // iOS renders in points at device scale; Android resizes directly in pixels.
+      const captureScale = Platform.OS === 'ios' ? PixelRatio.get() : 1;
+      const png = await captureRef(cardRef, {
+        format: 'png',
+        quality: 1,
+        width: 1080 / captureScale,
+        height: 1920 / captureScale,
+        result: 'base64',
+      });
+      await shareInvitation(png, message);
     } catch {
       if (mounted.current) {
         setFeedback('No pudimos compartir la tarjeta. Copia tu link o intenta de nuevo.');
@@ -149,8 +154,16 @@ export function InvitePage({
         importantForAccessibility="no-hide-descendants"
         style={styles.exportContainer}
       >
-        <View ref={cardRef} collapsable={false}>
-          <InvitationCard user={user} />
+        <View key={artworkKey} ref={cardRef} collapsable={false}>
+          <InvitationCard
+            user={user}
+            onReady={() => {
+              artwork.current.ready = true;
+            }}
+            onError={() => {
+              artwork.current.failed = true;
+            }}
+          />
         </View>
       </View>
       <ScrollView
@@ -161,7 +174,7 @@ export function InvitePage({
         bounces={false}
       >
         <Reveal play={reveal} index={0} rise={8} style={styles.celebration}>
-          <InviteConfetti active={active} />
+          <InviteConfetti active={active && !preview} />
           <TutuMascot mood="dance" size={52} />
         </Reveal>
         <Reveal play={reveal} index={1} rise={10} style={styles.heading}>
@@ -248,9 +261,12 @@ export function InvitePage({
             text="Toca el WhatsApp que te aparece y marca a todos los que quieras."
             horizontal={horizontal}
           >
-            <View
-              accessibilityElementsHidden
-              importantForAccessibility="no-hide-descendants"
+            <Pressable
+              testID="invitation-preview"
+              accessibilityRole="button"
+              accessibilityLabel="Ver tarjeta en grande"
+              accessibilityHint="Abre tu tarjeta. Usa la X para volver a Invitar."
+              onPress={() => setPreview(true)}
               style={[styles.messageTile, { backgroundColor: theme.referral.tile }]}
             >
               <View pointerEvents="none" style={styles.miniCard}>
@@ -262,7 +278,7 @@ export function InvitePage({
               <View style={styles.phoneWhatsapp}>
                 <WhatsAppIcon color="#20CE66" size={22} />
               </View>
-            </View>
+            </Pressable>
           </Step>
           <Step
             number={3}
@@ -289,6 +305,7 @@ export function InvitePage({
         )}
         {pageIndicator}
         <Pressable
+          testID="invite-whatsapp"
           accessibilityRole="button"
           accessibilityLabel="Invitar por WhatsApp"
           accessibilityState={{ disabled: !eligible || busy, busy }}
@@ -335,6 +352,7 @@ export function InvitePage({
           </Text>
         </Pressable>
       </View>
+      <InvitationCardPreview user={user} visible={preview} onClose={() => setPreview(false)} />
     </View>
   );
 }

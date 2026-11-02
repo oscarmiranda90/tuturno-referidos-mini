@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
+import { useRef } from 'react';
 import type { Tier } from '../../../shared/models/types';
 import { referralMoney } from '../../../shared/money';
 import { useTheme } from '../../../shared/theme/index';
@@ -8,6 +9,7 @@ import { StaticTierMedal } from '../../club/components/StaticTierMedal';
 import { ReferralDecoration } from './ReferralDecoration';
 import { useReferrals } from '../state/ReferralProvider';
 import type { ReferralUser } from '../domain/types';
+import { cardBenefit } from '../domain/cardBenefit';
 
 const TIER_NAME: Record<Tier, string> = {
   bronce: 'Bronce',
@@ -15,24 +17,36 @@ const TIER_NAME: Record<Tier, string> = {
   oro: 'Oro',
   diamante: 'Diamante',
 };
-const TIER_CAPACITY: Record<Tier, number> = { bronce: 1, plata: 2, oro: 3, diamante: 4 };
-
 /** Static 9:16 artwork for the sharing attachment and its instructional thumbnail. */
-export function InvitationCard({ user, width = 360 }: { user: ReferralUser; width?: number }) {
+export function InvitationCard({
+  user,
+  width = 360,
+  onReady,
+  onError,
+}: {
+  user: ReferralUser;
+  width?: number;
+  onReady?: () => void;
+  onError?: () => void;
+}) {
   const theme = useTheme();
   const { programCountry: country } = useReferrals();
   const count = user.collectedSanes;
   const cardTier = user.clubTier ?? 'bronce';
-  const san = country === 'VE' ? 'San' : 'cadena';
-  const brandInk = theme.referral.promotion;
+  const brandInk = theme.referral.cardInk;
   const scale = width / 360;
+  const loaded = useRef(new Set<string>());
+  const imageLoaded = (name: string) => {
+    loaded.current.add(name);
+    if (loaded.current.size === (count ? 4 : 3)) onReady?.();
+  };
   return (
     <View style={{ width, height: (width * 640) / 360, overflow: 'hidden' }}>
       <View
         style={[
           styles.card,
           {
-            backgroundColor: theme.referral.canvas,
+            backgroundColor: theme.referral.cardCanvas,
             height: 640,
             transform: [{ scale }],
             transformOrigin: 'top left',
@@ -46,12 +60,18 @@ export function InvitationCard({ user, width = 360 }: { user: ReferralUser; widt
               source={require('../../../../assets/icon.png')}
               contentFit="contain"
               style={styles.mark}
+              cachePolicy="memory-disk"
+              onLoad={() => imageLoaded('mark')}
+              onError={onError}
             />
             <Image
               source={require('../../../../assets/brand/wordmark-white.png')}
               contentFit="contain"
               tintColor={theme.referral.cardBrandInk}
               style={styles.wordmark}
+              cachePolicy="memory-disk"
+              onLoad={() => imageLoaded('wordmark')}
+              onError={onError}
             />
           </View>
           <Text variant="bodySm" style={{ color: brandInk }}>
@@ -66,11 +86,14 @@ export function InvitationCard({ user, width = 360 }: { user: ReferralUser; widt
             style={{ width: 100, height: (100 * 656) / 592 }}
             contentFit="contain"
             accessibilityLabel="Tutu te da la bienvenida al Club TuTurno"
+            cachePolicy="memory-disk"
+            onLoad={() => imageLoaded('tutu')}
+            onError={onError}
           />
-          <View style={styles.bubble}>
-            <Text variant="titleSm" color="onBrand">
+          <View style={[styles.bubble, { backgroundColor: theme.referral.cardPanel }]}>
+            <Text variant="titleSm" style={{ color: theme.referral.cardPanelInk }}>
               ¡Ven, aquí nos ayudamos a{' '}
-              <Text variant="titleSm" style={styles.green}>
+              <Text variant="titleSm" style={{ color: theme.referral.cardPanelAccent }}>
                 salir adelante!
               </Text>
             </Text>
@@ -95,7 +118,7 @@ export function InvitationCard({ user, width = 360 }: { user: ReferralUser; widt
               style={[
                 styles.trophy,
                 {
-                  backgroundColor: theme.referral.cardSurface,
+                  backgroundColor: theme.referral.cardTrophy,
                   borderColor: theme.referral.cardBorder,
                 },
               ]}
@@ -112,19 +135,23 @@ export function InvitationCard({ user, width = 360 }: { user: ReferralUser; widt
               style={[
                 styles.trophy,
                 {
-                  backgroundColor: theme.referral.cardSurface,
+                  backgroundColor: theme.referral.cardTrophy,
                   borderColor: theme.referral.cardBorder,
                 },
               ]}
             >
-              <StaticTierMedal tier={cardTier} size={60} />
+              <StaticTierMedal
+                tier={cardTier}
+                size={60}
+                onLoad={() => imageLoaded('medal')}
+                onError={onError}
+              />
               <Text variant="titleSm" style={{ color: brandInk }}>
                 {TIER_NAME[cardTier]}
               </Text>
-              <Text
-                variant="bodySm"
-                style={[styles.center, styles.benefit]}
-              >{`Juego ${TIER_CAPACITY[cardTier]} ${san} a la vez${cardTier === 'diamante' ? ' y 1 gratis' : ''}`}</Text>
+              <Text variant="bodySm" style={[styles.center, styles.benefit]}>
+                {cardBenefit(cardTier, country)}
+              </Text>
             </View>
           </View>
         )}
@@ -143,23 +170,24 @@ export function InvitationCard({ user, width = 360 }: { user: ReferralUser; widt
 }
 /** Promotional footer is part of the static image, flush with its lower edge. */
 function InvitationCardFooter() {
+  const theme = useTheme();
   const { state, programCountry: country } = useReferrals();
   const reward = referralMoney(state.configs[country].inviteeAmount, country);
   return (
-    <View style={styles.sheet}>
-      <Text variant="titleSm" color="onBrand" style={styles.center}>
+    <View style={[styles.sheet, { backgroundColor: theme.referral.cardPanel }]}>
+      <Text variant="titleSm" style={[styles.center, { color: theme.referral.cardPanelInk }]}>
         Entra hoy,{' '}
-        <Text variant="titleSm" style={styles.green}>
+        <Text variant="titleSm" style={{ color: theme.referral.cardPanelAccent }}>
           gana tus {reward}
         </Text>{' '}
         y arranca con {country === 'VE' ? 'el próximo San' : 'la próxima cadena'}.
       </Text>
-      <View style={styles.link}>
+      <View style={[styles.link, { backgroundColor: theme.referral.cardLink }]}>
         <Text variant="bodyMedium" style={[styles.center, styles.blue]}>
           ¿Quieres participar? Te explico cómo y te paso mi link.
         </Text>
       </View>
-      <Text variant="bodySm" color="onBrand" style={styles.center}>
+      <Text variant="bodySm" style={[styles.center, { color: theme.referral.cardPanelInk }]}>
         Promoción por tiempo limitado.
       </Text>
     </View>
@@ -172,7 +200,6 @@ const styles = StyleSheet.create({
   mark: { width: 34, height: 34 },
   wordmark: { width: 184, height: 42 },
   blue: { color: '#0023D1' },
-  green: { color: '#25E678' },
   center: { textAlign: 'center' },
   welcome: {
     height: 112,
@@ -181,7 +208,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     gap: 8,
   },
-  bubble: { flex: 1, backgroundColor: '#0023D1', padding: 14, borderRadius: 20 },
+  bubble: { flex: 1, padding: 14, borderRadius: 20 },
   identity: { alignItems: 'center', gap: 3, paddingHorizontal: 18, minHeight: 62 },
   name: { textAlign: 'center', fontSize: 29, lineHeight: 33 },
   trophies: { flexDirection: 'row', gap: 10, paddingHorizontal: 20, marginTop: 12 },
@@ -210,11 +237,10 @@ const styles = StyleSheet.create({
     right: 0,
   },
   sheet: {
-    backgroundColor: '#0023D1',
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
     padding: 19,
     gap: 11,
   },
-  link: { backgroundColor: '#FFFFFF', borderRadius: 13, padding: 10 },
+  link: { borderRadius: 13, padding: 10 },
 });

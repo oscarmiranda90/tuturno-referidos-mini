@@ -46,7 +46,7 @@ export function moneyExact(amount: number): string {
 /** The bare symbol, for the few places that compose their own string. */
 export const CURRENCY_SYMBOL = SYMBOL;
 
-/** Referral display follows the October cash-program brief, independently of SAN pricing. */
+/** Referral display follows the November cash-program brief, independently of SAN pricing. */
 export function referralMoney(
   amount: number,
   country: CountryCode,

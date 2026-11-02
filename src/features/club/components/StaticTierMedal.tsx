@@ -8,6 +8,8 @@ interface StaticTierMedalProps {
   size?: number;
   /** Unreached tiers stay recognisable but visually recede. */
   locked?: boolean;
+  onLoad?: () => void;
+  onError?: () => void;
 }
 
 const TIER_ASSET: Record<Tier, number> = {
@@ -25,7 +27,13 @@ const TIER_LABEL: Record<Tier, string> = {
 };
 
 /** Lightweight tier artwork for compact surfaces; the Club hero owns the 3D version. */
-export function StaticTierMedal({ tier, size = 42, locked = false }: StaticTierMedalProps) {
+export function StaticTierMedal({
+  tier,
+  size = 42,
+  locked = false,
+  onLoad,
+  onError,
+}: StaticTierMedalProps) {
   return (
     <Image
       source={TIER_ASSET[tier]}
@@ -34,7 +42,9 @@ export function StaticTierMedal({ tier, size = 42, locked = false }: StaticTierM
       cachePolicy="memory-disk"
       priority="high"
       recyclingKey={`medal-${tier}`}
-      transition={80}
+      transition={0}
+      onLoad={onLoad}
+      onError={onError}
       accessible
       accessibilityLabel={`Medalla ${TIER_LABEL[tier]}`}
     />

@@ -55,7 +55,7 @@ export function ReferralPage({
         .catch(() => {
           if (mounted) setError(true);
         });
-    else setSummary(summaryFor(state, 'demo-referrer', new Date().toISOString()));
+    else setSummary(summaryFor(state, 'demo-referrer'));
     return () => {
       mounted = false;
     };
@@ -239,6 +239,7 @@ export function ReferralPage({
         )}
         {pageIndicator}
         <Pressable
+          testID="referrals-whatsapp"
           accessibilityRole="button"
           onPress={onInvite}
           disabled={!config.active || !!error || !summary}
