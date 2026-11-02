@@ -8,6 +8,15 @@ los textos, las animaciones, Tutu y las medallas oficiales.
 los datos reales del usuario.** Puedes apoyarte en Claude o Codex: más abajo tienes
 un texto listo para copiar y pegar.
 
+## Mira el recorrido
+
+Ejemplo visual del flujo y de la imagen que se genera al compartir. La reseña
+que aparece en el video es una simulación de prueba.
+
+<img src="docs/media/flujo-referidos.gif" alt="Recorrido de referidos: reseña, pestañas de invitación y referidos, e imagen para compartir" width="360" />
+
+[Ver o descargar el video en MP4](docs/media/flujo-referidos.mp4).
+
 ## Primero: entiende qué debe pasar
 
 Hay **dos entradas al mismo flujo**:
