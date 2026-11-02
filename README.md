@@ -8,22 +8,6 @@ los textos, las animaciones, Tutu y las medallas oficiales.
 los datos reales del usuario.** Puedes apoyarte en Claude o Codex: más abajo tienes
 un texto listo para copiar y pegar.
 
-## Mira el recorrido
-
-Grabación actual de la app en Android. Muestra dos pruebas seguidas:
-
-1. **Desde Home:** Invitar, Mis referidos y la imagen para compartir, con chips,
-   puntos y deslizamiento.
-2. **Después de la reseña:** invitación sola, sin chips, sin puntos y sin cambio
-   de página al deslizar; luego se genera la misma imagen para compartir.
-
-La reseña mostrada es una simulación de prueba. El cambio entre las dos pruebas
-corresponde a entradas independientes, como explican los mapas de abajo.
-
-<img src="docs/media/flujo-referidos.gif?v=2" alt="Dos modos actuales: desde Home con pestañas y después de la reseña con invitación sola, ambos con imagen para compartir" width="360" />
-
-[Ver o descargar el video en MP4](docs/media/flujo-referidos.mp4).
-
 ## Primero: entiende qué debe pasar
 
 Hay **dos entradas al mismo contenido, con navegación diferente**:
@@ -55,6 +39,14 @@ flowchart TD
     R -->|Volver| H
 ```
 
+Grabación de este recorrido en Android: desde Home se abre **Invitar**, se cambia
+a **Mis referidos** y se genera la imagen para compartir. Incluye chips, puntos
+y deslizamiento.
+
+<img src="docs/media/flujo-home.gif" alt="Desde Home: Invitar y Mis referidos con pestañas, y generación de la imagen para compartir" width="360" />
+
+[Ver o descargar el video de Home en MP4](docs/media/flujo-home.mp4).
+
 **Qué debes observar al probarlo:**
 
 - Desde Home se abre **Invitar** directamente, sin pedir una reseña.
@@ -75,6 +67,14 @@ flowchart TD
     I -->|Invitar por WhatsApp| G["Generar imagen personalizada y abrir el selector para compartir"]
     I -->|Cerrar| H["Home"]
 ```
+
+Grabación de este recorrido en Android: después de la **simulación de reseña**
+se abre la invitación sola, sin chips, sin puntos y sin cambio de página al
+deslizar. También se muestra la generación de la imagen para compartir.
+
+<img src="docs/media/flujo-resena.gif" alt="Después de la reseña: invitación sola sin pestañas ni deslizamiento, y generación de la imagen para compartir" width="360" />
+
+[Ver o descargar el video de la reseña en MP4](docs/media/flujo-resena.mp4).
 
 **La app actual no tiene pantalla de día de cobro.** Por ahora conecta este flujo
 desde donde se pide la reseña. El cuadro punteado del mapa es una conexión futura,
