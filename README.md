@@ -10,8 +10,10 @@ un texto listo para copiar y pegar.
 
 ## Mira el recorrido
 
-Ejemplo visual del flujo y de la imagen que se genera al compartir. La reseña
-que aparece en el video es una simulación de prueba.
+Video de una versión anterior, útil como referencia visual de la imagen al
+compartir. En ese video todavía aparecen pestañas después de la reseña. **La
+versión actual usa la invitación sola en esa entrada**, como indica el mapa 2.
+La reseña del video es una simulación de prueba.
 
 <img src="docs/media/flujo-referidos.gif" alt="Recorrido de referidos: reseña, pestañas de invitación y referidos, e imagen para compartir" width="360" />
 
@@ -19,12 +21,17 @@ que aparece en el video es una simulación de prueba.
 
 ## Primero: entiende qué debe pasar
 
-Hay **dos entradas al mismo flujo**:
+Hay **dos entradas al mismo contenido, con navegación diferente**:
 
 1. La persona toca **Invitar** desde Home.
-2. La app solicita una **reseña** y después abre **Invitar**.
+2. La app solicita una **reseña** y después abre **Invitar sin pestañas**.
 
-En ambos casos, **Invitar es la primera pestaña** y **Mis referidos es la segunda**.
+| Desde dónde entras | Qué aparece | Cómo navegas |
+| --- | --- | --- |
+| Home → Invitar | **Invitar** primero y **Mis referidos** segundo | Chips superiores, puntos y deslizamiento |
+| Después de la reseña | Solo **Invitar** | Sin chips, sin puntos y sin deslizamiento entre páginas |
+
+Se reutilizan el mismo contenido y la misma lógica de compartir en ambos modos.
 La imagen **«Mira cómo voy» se genera para compartir por WhatsApp**. No es otra
 pantalla por la que el usuario deba pasar.
 
@@ -58,16 +65,18 @@ flowchart TD
 flowchart TD
     F["A futuro: pantalla de día de cobro"] -.-> E
     E["Hoy: la app llega al punto donde solicita una reseña"] --> Q["Solicitud de reseña"]
-    Q -->|Termina la interacción| I["Pestaña 1: Invitar"]
+    Q -->|Termina la interacción| I["Invitar: sin chips, puntos ni deslizamiento"]
     Q -->|Se omite, no aparece o falla| I
-    I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
     I -->|Invitar por WhatsApp| G["Generar imagen personalizada y abrir el selector para compartir"]
-    R -->|Invitar a más amigos| G
+    I -->|Cerrar| H["Home"]
 ```
 
 **La app actual no tiene pantalla de día de cobro.** Por ahora conecta este flujo
 desde donde se pide la reseña. El cuadro punteado del mapa es una conexión futura,
 no una pantalla que debas crear en esta entrega.
+
+Después de la reseña solo se muestra la invitación. Para consultar referidos,
+cierra esta pantalla, toca **Invitar** desde Home y abre **Mis referidos**.
 
 La reseña nunca debe ser un requisito para acceder a la invitación. No importa
 cuántas estrellas elija la persona ni si la tienda decide no mostrar el diálogo.
@@ -119,7 +128,8 @@ Si te falta alguno, pide ayuda para instalarlo antes de continuar.
 
    Abre o recarga el proyecto en Expo Go. Prueba **Omitir reseña** y luego, en
    otra prueba, elige estrellas y toca **Simular envío de reseña**. En ambos casos
-   debes llegar a **Invitar**.
+   debes llegar a **Invitar sin chips, sin puntos y sin deslizamiento**.
+   Cierra y entra desde Home para comprobar que allí sí aparecen las dos pestañas.
 
 Si Expo Go dice que el proyecto es incompatible, descarga la versión para
 **SDK 57** desde [la página de Expo](https://expo.dev/go?sdkVersion=57).
@@ -148,21 +158,28 @@ herramientas y navegación. No reemplaces la app completa por la muestra ni
 actualices su framework solo porque la muestra usa Expo SDK 57.
 
 Implementa estas dos entradas:
-1. Desde el botón Invitar del Home real: abrir directamente Invitar.
+1. Desde el botón Invitar del Home real: abrir Invitar como primera pestaña y
+   Mis referidos como segunda, con chips superiores, puntos y deslizamiento.
    No pedir una reseña en esta entrada. El Home vacío del mini repo solo sirve
    para demostrar el botón; conserva el Home de la app real.
 2. Desde donde la app pide una reseña: usar la solicitud nativa existente y
-   después continuar a Invitar. Si no aparece, se omite o falla, continuar igual.
-   No exigir estrellas positivas ni afirmar que se publicó una reseña.
+   después mostrar SOLO Invitar, sin chips, sin puntos y sin deslizamiento.
+   Mis referidos no debe quedar accesible con un gesto ni montado como página
+   oculta en este modo. Si la reseña no aparece, se omite o falla, continuar
+   igualmente a esta invitación sola. No exigir estrellas positivas ni afirmar
+   que se publicó una reseña.
 
 La app actual NO tiene pantalla de día de cobro. No la crees ni la uses como
 requisito. A futuro esa pantalla podrá activar la misma secuencia de reseña.
 La pantalla Simulación de reseña es solo para pruebas: no la uses como reseña
 real en producción. Conserva los límites de frecuencia de la app actual.
 
-Dentro del flujo:
-- Primera pestaña: Invitar. Segunda pestaña: Mis referidos.
-- Mantén sincronizados el selector doble, los puntos y el deslizamiento.
+Reutiliza el mismo componente de invitación, textos, recursos y lógica para
+compartir. Usa dos modos explícitos según la entrada; no dupliques el contenido.
+La muestra los llama mode="home" y mode="post-review".
+- En Home: mantén sincronizados selector doble, puntos y deslizamiento.
+- Después de la reseña: elimina esa navegación y conserva el botón de cerrar.
+- Cerrar regresa a Home. Una nueva entrada desde Home recupera las dos pestañas.
 - Conserva el confeti animado, Tutu y las medallas oficiales.
 - Mantén los textos aprobados y el estado Pendiente del listado.
 
@@ -179,7 +196,8 @@ Conecta la sesión y los servicios que ya existen. No inventes endpoints ni
 confirmaciones de pagos. Si falta un dato o un servicio, separa claramente
 la integración pendiente y explícame qué debe entregar el backend.
 
-Prueba las dos entradas, las dos pestañas y la imagen personalizada. Ejecuta
+Prueba ambos modos: las dos pestañas desde Home y la invitación sin navegación
+después de la reseña. Prueba la imagen personalizada en ambos. Ejecuta
 los chequeos del proyecto. Al terminar, explícame en español:
 - Qué archivos cambiaste y para qué.
 - Cómo probar cada entrada paso a paso.
@@ -192,8 +210,10 @@ ambos recorridos y la imagen generada con un perfil distinto al de la muestra.
 ## Cómo saber si la tarea está lista
 
 - [ ] Desde el Home real, **Invitar** abre la primera pestaña sin pedir reseña.
-- [ ] Desde la reseña, el flujo continúa a **Invitar** incluso si no se califica.
-- [ ] **Mis referidos** queda segunda y las tres formas de cambiar funcionan.
+- [ ] Desde la reseña se abre solo **Invitar**, incluso si no se califica.
+- [ ] Después de la reseña no hay chips, puntos ni deslizamiento hacia referidos.
+- [ ] Desde Home, **Mis referidos** queda segunda y las tres formas de cambiar funcionan.
+- [ ] Al cerrar la invitación sola y volver a entrar desde Home reaparecen las pestañas.
 - [ ] Tutu, las medallas, los textos y el estado **Pendiente** se conservan.
 - [ ] La imagen usa los datos del usuario y no aparece como otra pantalla.
 - [ ] Se probó compartir con WhatsApp en un teléfono y copiar el enlace.
@@ -260,11 +280,12 @@ web, el botón comparte el texto y el enlace.
 | Entrada | Recorrido actual | Regreso |
 | --- | --- | --- |
 | Desde Home | Home vacío → botón **Invitar** → **Invitar** / **Mis referidos** | Cerrar o volver regresa a Home |
-| Desde una solicitud de reseña de la app | Interacción de reseña → **Invitar** / **Mis referidos** | Cerrar o volver regresa a Home |
+| Desde una solicitud de reseña de la app | Interacción de reseña → solo **Invitar**, sin navegación entre páginas | Cerrar regresa a Home |
 
-**Invitar siempre es la primera pestaña; Mis referidos es la segunda.** El selector
-doble superior, los indicadores sobre el botón de WhatsApp y el deslizamiento
-horizontal controlan las mismas páginas.
+**Desde Home**, Invitar es la primera pestaña y Mis referidos es la segunda.
+El selector doble superior, los puntos y el deslizamiento controlan esas páginas.
+**Después de la reseña**, se muestra únicamente Invitar: no hay selector, puntos
+ni página de referidos accesible mediante deslizamiento.
 
 La entrada desde Home abre directamente **Invitar**, sin pedir una reseña, incluso
 si el usuario ya tiene referidos.
@@ -300,7 +321,8 @@ Sustituye `<metro-host>` por la dirección de Metro que aparece en tu terminal.
 
 La pantalla **Simulación de reseña** permite elegir estrellas y tocar **Simular
 envío de reseña**, o tocar **Omitir reseña**. Ambas opciones continúan a **Invitar**,
-independientemente de la calificación elegida. La simulación no publica ninguna
+independientemente de la calificación elegida. Esa invitación usa el modo sin
+pestañas, puntos ni deslizamiento. La simulación no publica ninguna
 calificación en una tienda. Home conserva únicamente su botón de invitar.
 
 Para intentar la solicitud nativa de la tienda:
@@ -324,8 +346,8 @@ A futuro, cuando Tu Turno incorpore la pantalla de día de cobro, esa pantalla p
 activar esta misma entrada:
 
 ```text
-Futuro: día de cobro → solicitud de reseña → Invitar → Mis referidos
-Actual:               solicitud de reseña → Invitar → Mis referidos
+Futuro: día de cobro → solicitud de reseña → Invitar sin pestañas
+Actual:               solicitud de reseña → Invitar sin pestañas
 ```
 
 La integración actual comienza en la solicitud de reseña y no requiere simular un
@@ -342,7 +364,14 @@ adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?e
 adb shell 'am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8083/--/?entry=review&mode=native" host.exp.exponent'
 ```
 
-Para capturas directas también existen `?entry=invite` y `?entry=referrals`.
+Para capturas directas:
+
+- `?entry=invite`: invitación con pestañas, como desde Home.
+- `?entry=referrals`: segunda pestaña del modo Home.
+- `?entry=invite&source=review`: invitación sola, como después de la reseña.
+
+La entrada real de prueba sigue siendo `?entry=review` o
+`?entry=review&mode=native`; el acceso directo evita esa interacción solo para capturas.
 En una compilación de desarrollo, el esquema registrado acepta
 `tuturnoreferidos://review`, `tuturnoreferidos://review?mode=native`,
 `tuturnoreferidos://invite` y `tuturnoreferidos://home`.
@@ -406,7 +435,10 @@ Para integrar estas pantallas:
    de fraude, la confirmación de pagos y el envío de premios.
 4. Ejecuta `reviewThenInvite(requestNativeReview, openInvitation)` desde el punto
    donde la app actual solicita la reseña. Desde Home se llama directamente a
-   `openInvitation`. Conserva la política de frecuencia y prevención de duplicados
+   `openInvitation` en modo Home. En la continuación de la reseña abre el modo
+   posterior a reseña. `ReferralsScreen` acepta `mode="home"` o `mode="post-review"`;
+   el segundo monta solo `InvitePage`, sin montar el listado ni el paginador.
+   Conserva la política de frecuencia y prevención de duplicados
    de Tu Turno; esta demostración permite repetir las pruebas manualmente.
 5. Conserva los textos y las ilustraciones aprobados. Conecta los datos sin añadir
    estados visibles de premios. El listado distingue entre quienes pagaron y
@@ -451,8 +483,9 @@ npm run check
 ciclos, el formato, la validación de español neutro y las pruebas del flujo de
 reseña, las rutas de entrada, los datos del listado y el perfil de la tarjeta.
 
-Antes de integrar en Tu Turno, verifica ambas entradas en Android e iOS, el
-selector, los indicadores, el deslizamiento, la reducción de movimiento, los
+Antes de integrar en Tu Turno, verifica ambos modos en Android e iOS: selector,
+puntos y deslizamiento desde Home; ausencia de esos controles y del listado
+después de la reseña. Comprueba también la reducción de movimiento, los
 cuatro niveles de medallas, nombres largos, el contenido del PNG, el portapapeles,
 la reseña nativa no disponible y la entrega real mediante WhatsApp.
 

@@ -10,7 +10,7 @@ import { useReferrals } from '../features/referrals/state/ReferralProvider';
 import type { User } from '../shared/models/types';
 import { Text } from '../shared/ui/Text';
 import { useTheme } from '../shared/theme/index';
-import { entryFromUrl, type Entry } from './entry';
+import { entryFromUrl, referralPresentation, type Entry } from './entry';
 
 export function MiniApp() {
   const [entry, setEntry] = useState<Entry>(
@@ -48,7 +48,7 @@ export function MiniApp() {
     if (entry !== 'native-review') return;
     let active = true;
     void reviewThenInvite(requestNativeReview, () => {
-      if (active) setEntry('invite');
+      if (active) setEntry('post-review-invite');
     });
     return () => {
       active = false;
@@ -61,7 +61,7 @@ export function MiniApp() {
         <HomeScreen onInvite={() => setEntry('invite')} />
       ) : entry === 'review' ? (
         <ReviewScreen
-          onDone={() => setEntry('invite')}
+          onDone={() => setEntry('post-review-invite')}
           onNativeReview={async () => setEntry('native-review')}
         />
       ) : entry === 'native-review' ? (
@@ -72,7 +72,7 @@ export function MiniApp() {
       ) : (
         <ReferralsScreen
           user={profile}
-          initialPage={entry === 'referrals' ? 1 : 0}
+          {...referralPresentation(entry)}
           onClose={() => setEntry('home')}
         />
       )}

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import assert from 'node:assert/strict';
 import { reviewThenInvite } from './reviewSequence';
-import { entryFromUrl } from '../../../app/entry';
+import { entryFromUrl, referralPresentation, type Entry } from '../../../app/entry';
 import { createDesignState } from '../demo/fixtures';
 import { summaryFor } from './engine';
 import { referralLedger } from './ledger';
@@ -39,6 +39,25 @@ async function verify() {
   assert.equal(entryFromUrl('tuturnoreferidos://invite'), 'invite');
   assert.equal(entryFromUrl('exp://127.0.0.1:8083/--/?entry=referrals'), 'referrals');
   assert.equal(entryFromUrl('broken'), null);
+  assert.deepEqual(referralPresentation('invite'), { mode: 'home', initialPage: 0 });
+  assert.deepEqual(referralPresentation('referrals'), { mode: 'home', initialPage: 1 });
+  assert.equal(
+    entryFromUrl('exp://127.0.0.1:8083/--/?entry=invite&source=review'),
+    'post-review-invite',
+  );
+  for (const fails of [false, true]) {
+    let next: Entry = 'review';
+    await reviewThenInvite(
+      async () => {
+        if (fails) throw new Error('Store refused');
+      },
+      () => {
+        next = 'post-review-invite';
+      },
+    );
+    assert.deepEqual(referralPresentation(next), { mode: 'post-review', initialPage: 0 });
+  }
+
   const state = createDesignState();
   const ledger = referralLedger(summaryFor(state, 'demo-referrer', '2026-11-02T12:00:00Z'));
   assert.equal(ledger.entries.length, 7);

@@ -27,14 +27,16 @@ import {
 /** One route owns the pager; each page owns its vertical scroll and actions. */
 export function ReferralsScreen({
   initialPage = 0,
+  mode = 'home',
   onClose,
   user,
 }: {
   user: import('../../../shared/models/types').User;
   initialPage?: ReferralPageIndex;
-  afterPayout?: boolean;
+  mode?: 'home' | 'post-review';
   onClose: () => void;
 }) {
+  const inviteOnly = mode === 'post-review';
   const reducedMotion = useReducedMotion();
   const invitation = useRef<InvitePageHandle>(null);
   const theme = useTheme();
@@ -45,6 +47,7 @@ export function ReferralsScreen({
   const [selected, setSelected] = useState(initialPage);
   const selectedRef = useRef(initialPage);
   const initialPageRef = useRef(initialPage);
+  const previousMode = useRef(mode);
   const currentPage = useSharedValue<number>(initialPage);
   // A page reveals its content as soon as the pager starts travelling towards
   // it, so the entrance is seen on the swipe instead of behind it.
@@ -66,8 +69,9 @@ export function ReferralsScreen({
   };
   // Keep the same page after rotation or a container-width change.
   useEffect(() => {
-    if (initialPageRef.current !== initialPage) {
+    if (initialPageRef.current !== initialPage || previousMode.current !== mode) {
       initialPageRef.current = initialPage;
+      previousMode.current = mode;
       selectedRef.current = initialPage;
       setSelected(initialPage);
       currentPage.value = initialPage;
@@ -75,7 +79,7 @@ export function ReferralsScreen({
       markRevealed(initialPage);
     }
     pager.current?.scrollTo({ x: selectedRef.current * pageWidth, animated: false });
-  }, [pageWidth, initialPage, currentPage, announced]);
+  }, [pageWidth, initialPage, mode, currentPage, announced]);
   const onLayout = (event: LayoutChangeEvent) => {
     const nextWidth = event.nativeEvent.layout.width;
     if (nextWidth > 0) setPageWidth(nextWidth);
@@ -108,10 +112,10 @@ export function ReferralsScreen({
   return (
     <View style={[styles.root, { backgroundColor: theme.referral.canvas, paddingTop: insets.top }]}>
       <StatusBar style={theme.mode === 'dark' ? 'light' : 'dark'} />
-      <View style={[styles.header, selected === 0 && styles.inviteHeader]}>
+      <View style={[styles.header, (inviteOnly || selected === 0) && styles.inviteHeader]}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={selected === 0 ? 'Cerrar' : 'Volver'}
+          accessibilityLabel={inviteOnly || selected === 0 ? 'Cerrar' : 'Volver'}
           onPress={onClose}
           style={({ pressed }) => [
             styles.back,
@@ -119,60 +123,68 @@ export function ReferralsScreen({
           ]}
         >
           <ReferralIcon
-            name={selected === 0 ? 'close' : 'back'}
+            name={inviteOnly || selected === 0 ? 'close' : 'back'}
             color={theme.text.secondary}
             size={20}
           />
         </Pressable>
-        <View style={styles.selector}>
-          <ReferralPageNavigation variant="chips" page={selected} onSelect={selectPage} />
+        {!inviteOnly && (
+          <View style={styles.selector}>
+            <ReferralPageNavigation variant="chips" page={selected} onSelect={selectPage} />
+          </View>
+        )}
+      </View>
+      {inviteOnly ? (
+        <View style={styles.pager}>
+          <InvitePage profile={user} active reveal />
         </View>
-      </View>
-      <View style={styles.pager} onLayout={onLayout}>
-        <Animated.ScrollView
-          ref={pager}
-          horizontal
-          pagingEnabled
-          directionalLockEnabled
-          bounces={false}
-          overScrollMode="never"
-          showsHorizontalScrollIndicator={false}
-          contentInsetAdjustmentBehavior="never"
-          contentContainerStyle={styles.pages}
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-          style={styles.pager}
-        >
-          <View
-            style={[styles.page, { width: pageWidth }]}
-            accessibilityElementsHidden={selected !== 0}
-            importantForAccessibility={selected === 0 ? 'auto' : 'no-hide-descendants'}
-            aria-hidden={selected !== 0}
+      ) : (
+        <View style={styles.pager} onLayout={onLayout}>
+          <Animated.ScrollView
+            ref={pager}
+            horizontal
+            pagingEnabled
+            directionalLockEnabled
+            bounces={false}
+            overScrollMode="never"
+            showsHorizontalScrollIndicator={false}
+            contentInsetAdjustmentBehavior="never"
+            contentContainerStyle={styles.pages}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            style={styles.pager}
           >
-            <InvitePage
-              ref={invitation}
-              profile={user}
-              pageIndicator={pageIndicator}
-              active={selected === 0}
-              reveal={revealed[0]}
-            />
-          </View>
-          <View
-            style={[styles.page, { width: pageWidth }]}
-            accessibilityElementsHidden={selected !== 1}
-            importantForAccessibility={selected === 1 ? 'auto' : 'no-hide-descendants'}
-            aria-hidden={selected !== 1}
-          >
-            <ReferralPage
-              pageIndicator={pageIndicator}
-              reveal={revealed[1]}
-              onInvite={() => {
-                void invitation.current?.share();
-              }}
-            />
-          </View>
-        </Animated.ScrollView>
-      </View>
+            <View
+              style={[styles.page, { width: pageWidth }]}
+              accessibilityElementsHidden={selected !== 0}
+              importantForAccessibility={selected === 0 ? 'auto' : 'no-hide-descendants'}
+              aria-hidden={selected !== 0}
+            >
+              <InvitePage
+                ref={invitation}
+                profile={user}
+                pageIndicator={pageIndicator}
+                active={selected === 0}
+                reveal={revealed[0]}
+              />
+            </View>
+            <View
+              style={[styles.page, { width: pageWidth }]}
+              accessibilityElementsHidden={selected !== 1}
+              importantForAccessibility={selected === 1 ? 'auto' : 'no-hide-descendants'}
+              aria-hidden={selected !== 1}
+            >
+              <ReferralPage
+                pageIndicator={pageIndicator}
+                reveal={revealed[1]}
+                onInvite={() => {
+                  void invitation.current?.share();
+                }}
+              />
+            </View>
+          </Animated.ScrollView>
+        </View>
+      )}
       <View style={{ paddingBottom: insets.bottom, backgroundColor: theme.referral.canvas }} />
     </View>
   );
