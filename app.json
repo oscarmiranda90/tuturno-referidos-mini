@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Tu Turno \u00b7 Referidos",
+    "slug": "tuturno-referidos-mini",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "tuturnoreferidos",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#FFFFFF",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.tuturno.referidosdemo"
+    },
+    "android": {
+      "package": "com.tuturno.referidosdemo"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-image",
+      "expo-sharing"
+    ]
+  }
+}

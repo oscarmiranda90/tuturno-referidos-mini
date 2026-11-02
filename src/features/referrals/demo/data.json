@@ -1,0 +1,778 @@
+{
+  "configs": {
+    "VE": {
+      "country": "VE",
+      "referrerAmount": 3,
+      "inviteeAmount": 3,
+      "validityDays": 7,
+      "weeklyAlertThreshold": 10,
+      "payoutMethod": "automatic",
+      "active": true,
+      "clubReferralPointsEnabled": false
+    },
+    "CO": {
+      "country": "CO",
+      "referrerAmount": 12000,
+      "inviteeAmount": 12000,
+      "validityDays": 7,
+      "weeklyAlertThreshold": 10,
+      "payoutMethod": "manual",
+      "active": true,
+      "clubReferralPointsEnabled": false
+    }
+  },
+  "users": [
+    {
+      "id": "demo-referrer",
+      "firstName": "Pedro",
+      "lastName": "P\u00e9rez",
+      "country": "VE",
+      "identityKey": "demo-identity",
+      "deviceKey": "demo-device",
+      "paymentKey": "demo-phone",
+      "paymentRegisteredAt": "2026-01-01T00:00:00Z",
+      "confirmedInstallments": 2,
+      "collectedSanes": 7,
+      "sanesStarted": 2,
+      "referralCode": "NUYUQP",
+      "clubTier": "diamante"
+    },
+    {
+      "id": "design-friend-0",
+      "firstName": "Pedro",
+      "lastName": "P\u00e9rez",
+      "country": "VE",
+      "identityKey": "design-identity-0",
+      "deviceKey": "design-device-0",
+      "paymentKey": "design-phone-0",
+      "paymentRegisteredAt": "2026-10-02T12:00:00.000Z",
+      "confirmedInstallments": 1,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN0"
+    },
+    {
+      "id": "design-friend-1",
+      "firstName": "Mar\u00eda",
+      "lastName": "Gonz\u00e1lez",
+      "country": "VE",
+      "identityKey": "design-identity-1",
+      "deviceKey": "design-device-1",
+      "paymentKey": "design-phone-1",
+      "paymentRegisteredAt": "2026-10-04T12:00:00.000Z",
+      "confirmedInstallments": 1,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN1"
+    },
+    {
+      "id": "design-friend-2",
+      "firstName": "Luis",
+      "lastName": "",
+      "country": "VE",
+      "identityKey": "design-identity-2",
+      "deviceKey": "design-device-2",
+      "paymentKey": "design-phone-2",
+      "paymentRegisteredAt": "2026-10-09T12:00:00.000Z",
+      "confirmedInstallments": 0,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN2",
+      "email": "luisc87@gmail.com"
+    },
+    {
+      "id": "design-friend-3",
+      "firstName": "Andr\u00e9s",
+      "lastName": "Rojas",
+      "country": "VE",
+      "identityKey": "design-identity-3",
+      "deviceKey": "design-device-3",
+      "paymentKey": "design-phone-3",
+      "paymentRegisteredAt": "2026-10-12T12:00:00.000Z",
+      "confirmedInstallments": 1,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN3"
+    },
+    {
+      "id": "design-friend-4",
+      "firstName": "Camila",
+      "lastName": "Torres",
+      "country": "VE",
+      "identityKey": "design-identity-4",
+      "deviceKey": "design-device-4",
+      "paymentKey": "design-phone-4",
+      "paymentRegisteredAt": "2026-10-15T12:00:00.000Z",
+      "confirmedInstallments": 1,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN4"
+    },
+    {
+      "id": "design-friend-5",
+      "firstName": "Yusmary",
+      "lastName": "",
+      "country": "VE",
+      "identityKey": "design-identity-5",
+      "deviceKey": "design-device-5",
+      "paymentKey": "design-phone-5",
+      "paymentRegisteredAt": "2026-10-20T12:00:00.000Z",
+      "confirmedInstallments": 0,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN5",
+      "email": "yusmary.q@gmail.com"
+    },
+    {
+      "id": "design-friend-6",
+      "firstName": "Diego",
+      "lastName": "Mora",
+      "country": "VE",
+      "identityKey": "design-identity-6",
+      "deviceKey": "design-device-6",
+      "paymentKey": "design-phone-6",
+      "paymentRegisteredAt": "2026-10-24T12:00:00.000Z",
+      "confirmedInstallments": 1,
+      "collectedSanes": 0,
+      "sanesStarted": 2,
+      "referralCode": "DESIGN6"
+    }
+  ],
+  "attributions": [
+    {
+      "id": "design-link-0",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-02T12:00:00.000Z",
+      "expiresAt": "2026-10-09T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    },
+    {
+      "id": "design-link-1",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-04T12:00:00.000Z",
+      "expiresAt": "2026-10-11T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    },
+    {
+      "id": "design-link-2",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-09T12:00:00.000Z",
+      "expiresAt": "2026-10-16T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    },
+    {
+      "id": "design-link-3",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-12T12:00:00.000Z",
+      "expiresAt": "2026-10-19T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    },
+    {
+      "id": "design-link-4",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-15T12:00:00.000Z",
+      "expiresAt": "2026-10-22T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    },
+    {
+      "id": "design-link-5",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-20T12:00:00.000Z",
+      "expiresAt": "2026-10-27T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    },
+    {
+      "id": "design-link-6",
+      "code": "NUYUQP",
+      "referrerId": "demo-referrer",
+      "openedAt": "2026-10-24T12:00:00.000Z",
+      "expiresAt": "2026-10-31T12:00:00.000Z",
+      "config": {
+        "country": "VE",
+        "referrerAmount": 3,
+        "inviteeAmount": 3,
+        "validityDays": 7,
+        "weeklyAlertThreshold": 10,
+        "payoutMethod": "automatic",
+        "active": true,
+        "clubReferralPointsEnabled": false
+      }
+    }
+  ],
+  "referrals": [
+    {
+      "id": "referral:design-friend-0",
+      "attribution": {
+        "id": "design-link-0",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-02T12:00:00.000Z",
+        "expiresAt": "2026-10-09T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-0",
+      "registeredAt": "2026-10-02T12:00:00.000Z",
+      "firstConfirmedAt": "2026-10-02T12:00:00.000Z"
+    },
+    {
+      "id": "referral:design-friend-1",
+      "attribution": {
+        "id": "design-link-1",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-04T12:00:00.000Z",
+        "expiresAt": "2026-10-11T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-1",
+      "registeredAt": "2026-10-04T12:00:00.000Z",
+      "firstConfirmedAt": "2026-10-04T12:00:00.000Z"
+    },
+    {
+      "id": "referral:design-friend-2",
+      "attribution": {
+        "id": "design-link-2",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-09T12:00:00.000Z",
+        "expiresAt": "2026-10-16T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-2",
+      "registeredAt": "2026-10-09T12:00:00.000Z",
+      "firstConfirmedAt": null
+    },
+    {
+      "id": "referral:design-friend-3",
+      "attribution": {
+        "id": "design-link-3",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-12T12:00:00.000Z",
+        "expiresAt": "2026-10-19T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-3",
+      "registeredAt": "2026-10-12T12:00:00.000Z",
+      "firstConfirmedAt": "2026-10-12T12:00:00.000Z"
+    },
+    {
+      "id": "referral:design-friend-4",
+      "attribution": {
+        "id": "design-link-4",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-15T12:00:00.000Z",
+        "expiresAt": "2026-10-22T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-4",
+      "registeredAt": "2026-10-15T12:00:00.000Z",
+      "firstConfirmedAt": "2026-10-15T12:00:00.000Z"
+    },
+    {
+      "id": "referral:design-friend-5",
+      "attribution": {
+        "id": "design-link-5",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-20T12:00:00.000Z",
+        "expiresAt": "2026-10-27T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-5",
+      "registeredAt": "2026-10-20T12:00:00.000Z",
+      "firstConfirmedAt": null
+    },
+    {
+      "id": "referral:design-friend-6",
+      "attribution": {
+        "id": "design-link-6",
+        "code": "NUYUQP",
+        "referrerId": "demo-referrer",
+        "openedAt": "2026-10-24T12:00:00.000Z",
+        "expiresAt": "2026-10-31T12:00:00.000Z",
+        "config": {
+          "country": "VE",
+          "referrerAmount": 3,
+          "inviteeAmount": 3,
+          "validityDays": 7,
+          "weeklyAlertThreshold": 10,
+          "payoutMethod": "automatic",
+          "active": true,
+          "clubReferralPointsEnabled": false
+        }
+      },
+      "inviteeId": "design-friend-6",
+      "registeredAt": "2026-10-24T12:00:00.000Z",
+      "firstConfirmedAt": "2026-10-24T12:00:00.000Z"
+    }
+  ],
+  "rewards": [
+    {
+      "userId": "demo-referrer",
+      "role": "referrer",
+      "amount": 3,
+      "id": "referral:design-friend-0:referrer",
+      "referralId": "referral:design-friend-0",
+      "country": "VE",
+      "createdAt": "2026-10-02T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-02T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-0:referrer",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "design-friend-0",
+      "role": "invitee",
+      "amount": 3,
+      "id": "referral:design-friend-0:invitee",
+      "referralId": "referral:design-friend-0",
+      "country": "VE",
+      "createdAt": "2026-10-02T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-02T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-0:invitee",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "demo-referrer",
+      "role": "referrer",
+      "amount": 3,
+      "id": "referral:design-friend-1:referrer",
+      "referralId": "referral:design-friend-1",
+      "country": "VE",
+      "createdAt": "2026-10-04T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-04T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-1:referrer",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "design-friend-1",
+      "role": "invitee",
+      "amount": 3,
+      "id": "referral:design-friend-1:invitee",
+      "referralId": "referral:design-friend-1",
+      "country": "VE",
+      "createdAt": "2026-10-04T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-04T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-1:invitee",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "demo-referrer",
+      "role": "referrer",
+      "amount": 3,
+      "id": "referral:design-friend-3:referrer",
+      "referralId": "referral:design-friend-3",
+      "country": "VE",
+      "createdAt": "2026-10-12T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-12T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-3:referrer",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "design-friend-3",
+      "role": "invitee",
+      "amount": 3,
+      "id": "referral:design-friend-3:invitee",
+      "referralId": "referral:design-friend-3",
+      "country": "VE",
+      "createdAt": "2026-10-12T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-12T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-3:invitee",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "demo-referrer",
+      "role": "referrer",
+      "amount": 3,
+      "id": "referral:design-friend-4:referrer",
+      "referralId": "referral:design-friend-4",
+      "country": "VE",
+      "createdAt": "2026-10-15T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-15T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-4:referrer",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "design-friend-4",
+      "role": "invitee",
+      "amount": 3,
+      "id": "referral:design-friend-4:invitee",
+      "referralId": "referral:design-friend-4",
+      "country": "VE",
+      "createdAt": "2026-10-15T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-15T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-4:invitee",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "demo-referrer",
+      "role": "referrer",
+      "amount": 3,
+      "id": "referral:design-friend-6:referrer",
+      "referralId": "referral:design-friend-6",
+      "country": "VE",
+      "createdAt": "2026-10-24T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-24T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-6:referrer",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    },
+    {
+      "userId": "design-friend-6",
+      "role": "invitee",
+      "amount": 3,
+      "id": "referral:design-friend-6:invitee",
+      "referralId": "referral:design-friend-6",
+      "country": "VE",
+      "createdAt": "2026-10-24T12:00:00.000Z",
+      "status": "sent",
+      "sentAt": "2026-10-24T12:00:00.000Z",
+      "transactionId": "DESIGN-referral:design-friend-6:invitee",
+      "localAmount": 3,
+      "euroRate": 1,
+      "error": null
+    }
+  ],
+  "notices": [
+    {
+      "id": "referral:design-friend-0:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-0",
+      "kind": "registered",
+      "body": "Pedro ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-02T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-0:qualified",
+      "referralId": "referral:design-friend-0",
+      "userId": "demo-referrer",
+      "kind": "qualified",
+      "body": "Pedro pag\u00f3 su primera cuota. Ganaste 3$.",
+      "createdAt": "2026-10-02T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-0:referrer:sent",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-0",
+      "kind": "sent",
+      "body": "Te enviamos tus 3$. Revisa tu pago m\u00f3vil.",
+      "createdAt": "2026-10-02T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-0:invitee:sent",
+      "userId": "design-friend-0",
+      "referralId": "referral:design-friend-0",
+      "kind": "sent",
+      "body": "Ganaste 3$ por entrar con el link de Pedro. Te los enviamos.",
+      "createdAt": "2026-10-02T12:00:00.000Z",
+      "destination": "choose-san"
+    },
+    {
+      "id": "referral:design-friend-1:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-1",
+      "kind": "registered",
+      "body": "Mar\u00eda ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-04T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-1:qualified",
+      "referralId": "referral:design-friend-1",
+      "userId": "demo-referrer",
+      "kind": "qualified",
+      "body": "Mar\u00eda pag\u00f3 su primera cuota. Ganaste 3$.",
+      "createdAt": "2026-10-04T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-1:referrer:sent",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-1",
+      "kind": "sent",
+      "body": "Te enviamos tus 3$. Revisa tu pago m\u00f3vil.",
+      "createdAt": "2026-10-04T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-1:invitee:sent",
+      "userId": "design-friend-1",
+      "referralId": "referral:design-friend-1",
+      "kind": "sent",
+      "body": "Ganaste 3$ por entrar con el link de Pedro. Te los enviamos.",
+      "createdAt": "2026-10-04T12:00:00.000Z",
+      "destination": "choose-san"
+    },
+    {
+      "id": "referral:design-friend-2:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-2",
+      "kind": "registered",
+      "body": "Luis ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-09T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-3:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-3",
+      "kind": "registered",
+      "body": "Andr\u00e9s ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-12T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-3:qualified",
+      "referralId": "referral:design-friend-3",
+      "userId": "demo-referrer",
+      "kind": "qualified",
+      "body": "Andr\u00e9s pag\u00f3 su primera cuota. Ganaste 3$.",
+      "createdAt": "2026-10-12T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-3:referrer:sent",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-3",
+      "kind": "sent",
+      "body": "Te enviamos tus 3$. Revisa tu pago m\u00f3vil.",
+      "createdAt": "2026-10-12T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-3:invitee:sent",
+      "userId": "design-friend-3",
+      "referralId": "referral:design-friend-3",
+      "kind": "sent",
+      "body": "Ganaste 3$ por entrar con el link de Pedro. Te los enviamos.",
+      "createdAt": "2026-10-12T12:00:00.000Z",
+      "destination": "choose-san"
+    },
+    {
+      "id": "referral:design-friend-4:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-4",
+      "kind": "registered",
+      "body": "Camila ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-15T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-4:qualified",
+      "referralId": "referral:design-friend-4",
+      "userId": "demo-referrer",
+      "kind": "qualified",
+      "body": "Camila pag\u00f3 su primera cuota. Ganaste 3$.",
+      "createdAt": "2026-10-15T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-4:referrer:sent",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-4",
+      "kind": "sent",
+      "body": "Te enviamos tus 3$. Revisa tu pago m\u00f3vil.",
+      "createdAt": "2026-10-15T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-4:invitee:sent",
+      "userId": "design-friend-4",
+      "referralId": "referral:design-friend-4",
+      "kind": "sent",
+      "body": "Ganaste 3$ por entrar con el link de Pedro. Te los enviamos.",
+      "createdAt": "2026-10-15T12:00:00.000Z",
+      "destination": "choose-san"
+    },
+    {
+      "id": "referral:design-friend-5:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-5",
+      "kind": "registered",
+      "body": "Yusmary ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-20T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-6:registered",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-6",
+      "kind": "registered",
+      "body": "Diego ya entr\u00f3 a TuTurno. Le quedan 7 d\u00edas para pagar su primera cuota y ganas 3$.",
+      "createdAt": "2026-10-24T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-6:qualified",
+      "referralId": "referral:design-friend-6",
+      "userId": "demo-referrer",
+      "kind": "qualified",
+      "body": "Diego pag\u00f3 su primera cuota. Ganaste 3$.",
+      "createdAt": "2026-10-24T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-6:referrer:sent",
+      "userId": "demo-referrer",
+      "referralId": "referral:design-friend-6",
+      "kind": "sent",
+      "body": "Te enviamos tus 3$. Revisa tu pago m\u00f3vil.",
+      "createdAt": "2026-10-24T12:00:00.000Z",
+      "destination": "referrals"
+    },
+    {
+      "id": "referral:design-friend-6:invitee:sent",
+      "userId": "design-friend-6",
+      "referralId": "referral:design-friend-6",
+      "kind": "sent",
+      "body": "Ganaste 3$ por entrar con el link de Pedro. Te los enviamos.",
+      "createdAt": "2026-10-24T12:00:00.000Z",
+      "destination": "choose-san"
+    }
+  ],
+  "events": []
+}
