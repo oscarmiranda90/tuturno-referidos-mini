@@ -24,8 +24,7 @@ pantalla por la que el usuario deba pasar.
 ```mermaid
 flowchart TD
     H["Home: solo el botón Invitar"] -->|Toca Invitar| I["Pestaña 1: Invitar"]
-    I -->|"Selector, puntos o deslizar"| R["Pestaña 2: Mis referidos"]
-    R -->|"Volver con los mismos controles"| I
+    I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
     I -->|Invitar por WhatsApp| G["La app genera el PNG con los datos del usuario"]
     R -->|Invitar a más amigos| G
     G --> S["Se abre el selector para compartir del teléfono"]
@@ -52,8 +51,7 @@ flowchart TD
     E["Hoy: la app llega al punto donde solicita una reseña"] --> Q["Solicitud de reseña"]
     Q -->|Termina la interacción| I["Pestaña 1: Invitar"]
     Q -->|Se omite, no aparece o falla| I
-    I -->|"Selector, puntos o deslizar"| R["Pestaña 2: Mis referidos"]
-    R -->|"Volver con los mismos controles"| I
+    I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
     I -->|Invitar por WhatsApp| G["Generar imagen personalizada y abrir el selector para compartir"]
     R -->|Invitar a más amigos| G
 ```
