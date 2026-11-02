@@ -1,10 +1,215 @@
-# Tu Turno · Mini app de referidos
+# Tu Turno · Referidos para integrar paso a paso
 
-Proyecto independiente con Expo SDK 57 para el equipo de Maracay. Incluye únicamente
-las pantallas de referidos, un Home mínimo, la entrada desde la solicitud de reseña
-y los recursos necesarios para reproducir los diseños aprobados. Tiene un historial
-Git propio y funciona sin el repositorio completo de Tu Turno, una cuenta,
-credenciales de API ni un backend.
+Este repositorio es una muestra pequeña que puedes abrir, probar y usar como
+referencia para agregar el flujo de referidos a Tu Turno. Incluye las pantallas,
+los textos, las animaciones, Tutu y las medallas oficiales.
+
+**Tu tarea es llevar este flujo a la app actual, conservando su diseño y conectando
+los datos reales del usuario.** Puedes apoyarte en Claude o Codex: más abajo tienes
+un texto listo para copiar y pegar.
+
+## Primero: entiende qué debe pasar
+
+Hay **dos entradas al mismo flujo**:
+
+1. La persona toca **Invitar** desde Home.
+2. La app solicita una **reseña** y después abre **Invitar**.
+
+En ambos casos, **Invitar es la primera pestaña** y **Mis referidos es la segunda**.
+La imagen **«Mira cómo voy» se genera para compartir por WhatsApp**. No es otra
+pantalla por la que el usuario deba pasar.
+
+## Mapita 1: entrada desde Home
+
+```mermaid
+flowchart TD
+    H["Home: solo el botón Invitar"] -->|Toca Invitar| I["Pestaña 1: Invitar"]
+    I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
+    I -->|Invitar por WhatsApp| G["La app genera el PNG con los datos del usuario"]
+    R -->|Invitar a más amigos| G
+    G --> S["Se abre el selector para compartir del teléfono"]
+    S -->|Elige WhatsApp| W["WhatsApp: el usuario elige a quién enviarlo"]
+    S -->|Cancela| V["Permanece en la pestaña desde la que compartió"]
+    I -->|Cerrar| H
+    R -->|Volver| H
+```
+
+**Qué debes observar al probarlo:**
+
+- Desde Home se abre **Invitar** directamente, sin pedir una reseña.
+- Puedes cambiar de pestaña tocando los chips, los puntos o deslizando.
+- **Mis referidos** muestra quién pagó, quién está **Pendiente** y el total ganado.
+- Los botones verdes de ambas pestañas comparten la misma tarjeta y el enlace.
+- **Copiar link** solo copia el enlace; no abre WhatsApp ni genera la imagen.
+- Generar el PNG es un paso interno: no aparece una pantalla extra.
+
+## Mapita 2: entrada desde la reseña
+
+```mermaid
+flowchart TD
+    F["A futuro: pantalla de día de cobro"] -.-> E
+    E["Hoy: la app llega al punto donde solicita una reseña"] --> Q["Solicitud de reseña"]
+    Q -->|Termina la interacción| I["Pestaña 1: Invitar"]
+    Q -->|Se omite, no aparece o falla| I
+    I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
+    I -->|Invitar por WhatsApp| G["Generar imagen personalizada y abrir el selector para compartir"]
+    R -->|Invitar a más amigos| G
+```
+
+**La app actual no tiene pantalla de día de cobro.** Por ahora conecta este flujo
+desde donde se pide la reseña. El cuadro punteado del mapa es una conexión futura,
+no una pantalla que debas crear en esta entrega.
+
+La reseña nunca debe ser un requisito para acceder a la invitación. No importa
+cuántas estrellas elija la persona ni si la tienda decide no mostrar el diálogo.
+
+En este mini repo, **Simulación de reseña** sirve para probar el recorrido sin
+publicar una calificación. En la app real se usa la solicitud nativa de la tienda.
+En iOS, la tienda no informa cuándo se cerró el diálogo ni si se publicó una
+reseña; no se debe inventar esa confirmación. Los detalles están al final.
+
+## Cómo abrir la muestra en tu computadora
+
+Necesitas **Git**, **Node.js 22.13 o posterior** y **Expo Go para SDK 57**.
+Si te falta alguno, pide ayuda para instalarlo antes de continuar.
+
+1. Abre una terminal en la carpeta donde guardas tus proyectos.
+2. Descarga este repositorio y entra en su carpeta:
+
+   ```sh
+   git clone https://github.com/oscarmiranda90/tuturno-referidos-mini.git
+   cd tuturno-referidos-mini
+   ```
+
+3. Instala lo que necesita y revisa que esté bien:
+
+   ```sh
+   npm ci
+   npm run check
+   ```
+
+   `npm ci` instala las dependencias. `npm run check` revisa el código y ejecuta
+   las pruebas. Si aparece un error, conserva el mensaje completo y pídele a tu
+   agente que lo revise antes de seguir.
+
+4. Abre la muestra:
+
+   ```sh
+   npm start
+   ```
+
+   Verás un QR. Escanéalo con Expo Go desde un teléfono en la misma red.
+   También puedes pulsar `a` si tienes un emulador Android encendido o `i` para
+   un simulador iOS en una Mac con Xcode.
+
+5. Para probar la otra entrada, detén Metro con `Ctrl+C` y ejecuta:
+
+   ```sh
+   npm run start:review
+   ```
+
+   Abre o recarga el proyecto en Expo Go. Prueba **Omitir reseña** y luego, en
+   otra prueba, elige estrellas y toca **Simular envío de reseña**. En ambos casos
+   debes llegar a **Invitar**.
+
+Si Expo Go dice que el proyecto es incompatible, descarga la versión para
+**SDK 57** desde [la página de Expo](https://expo.dev/go?sdkVersion=57).
+La generación de la imagen y WhatsApp se prueban en Android o iOS.
+
+## Básicamente: pégame en tu agente, Claude o Codex, y pídele esto
+
+Abre **el proyecto de la app actual de Tu Turno** en tu editor y usa su agente.
+Copia el bloque completo de abajo. El agente debe tener acceso tanto a la app
+actual como a este repositorio de referencia. Si no lo tiene, comparte la carpeta
+o el enlace; no necesita contraseñas ni datos de usuarios para estudiar la muestra.
+
+```text
+Necesito integrar el flujo de referidos en la app actual de Tu Turno.
+
+Referencia pública:
+https://github.com/oscarmiranda90/tuturno-referidos-mini
+
+Primero lee su README y revisa su código. Revisa también la estructura y las
+instrucciones del proyecto actual. Si no tienes acceso a alguno de los dos
+proyectos, indícame exactamente qué carpeta necesitas.
+
+Usa la muestra como referencia de pantallas, textos, márgenes, animaciones,
+Tutu y medallas. Integra el flujo dentro de la app existente, respetando sus
+herramientas y navegación. No reemplaces la app completa por la muestra ni
+actualices su framework solo porque la muestra usa Expo SDK 57.
+
+Implementa estas dos entradas:
+1. Desde el botón Invitar del Home real: abrir directamente Invitar.
+   No pedir una reseña en esta entrada. El Home vacío del mini repo solo sirve
+   para demostrar el botón; conserva el Home de la app real.
+2. Desde donde la app pide una reseña: usar la solicitud nativa existente y
+   después continuar a Invitar. Si no aparece, se omite o falla, continuar igual.
+   No exigir estrellas positivas ni afirmar que se publicó una reseña.
+
+La app actual NO tiene pantalla de día de cobro. No la crees ni la uses como
+requisito. A futuro esa pantalla podrá activar la misma secuencia de reseña.
+La pantalla Simulación de reseña es solo para pruebas: no la uses como reseña
+real en producción. Conserva los límites de frecuencia de la app actual.
+
+Dentro del flujo:
+- Primera pestaña: Invitar. Segunda pestaña: Mis referidos.
+- Mantén sincronizados el selector doble, los puntos y el deslizamiento.
+- Conserva el confeti animado, Tutu y las medallas oficiales.
+- Mantén los textos aprobados y el estado Pendiente del listado.
+
+Mira cómo voy NO es una pantalla. Al compartir, genera una imagen estática
+1080x1920 con el nombre completo, los SAN cobrados confirmados y el nivel real
+del usuario, junto con su enlace de referido. El contador no es la cantidad
+de amigos ni de cuotas pagadas. No dejes el nombre Pedro ni la medalla Diamante
+fijos: son datos de ejemplo. El usuario elige WhatsApp y los destinatarios.
+En Android, revisa la limitación documentada de compartir imagen y descripción:
+la muestra copia el texto/enlace para pegarlo manualmente; no prometas envío
+conjunto automático sin implementar y verificar el transporte necesario.
+
+Conecta la sesión y los servicios que ya existen. No inventes endpoints ni
+confirmaciones de pagos. Si falta un dato o un servicio, separa claramente
+la integración pendiente y explícame qué debe entregar el backend.
+
+Prueba las dos entradas, las dos pestañas y la imagen personalizada. Ejecuta
+los chequeos del proyecto. Al terminar, explícame en español:
+- Qué archivos cambiaste y para qué.
+- Cómo probar cada entrada paso a paso.
+- Qué funciona y qué sigue pendiente de datos o pruebas en un teléfono real.
+```
+
+**Revisa el resultado con el agente.** Si dice que terminó, pídele que te muestre
+ambos recorridos y la imagen generada con un perfil distinto al de la muestra.
+
+## Cómo saber si la tarea está lista
+
+- [ ] Desde el Home real, **Invitar** abre la primera pestaña sin pedir reseña.
+- [ ] Desde la reseña, el flujo continúa a **Invitar** incluso si no se califica.
+- [ ] **Mis referidos** queda segunda y las tres formas de cambiar funcionan.
+- [ ] Tutu, las medallas, los textos y el estado **Pendiente** se conservan.
+- [ ] La imagen usa los datos del usuario y no aparece como otra pantalla.
+- [ ] Se probó compartir con WhatsApp en un teléfono y copiar el enlace.
+- [ ] Los chequeos pasan y queda escrito qué datos o servicios faltan conectar.
+
+## Palabras que encontrarás
+
+| Palabra | Qué significa aquí |
+| --- | --- |
+| Repositorio o repo | La carpeta de código con su historial de cambios. |
+| Terminal | La ventana donde escribes comandos como `npm start`. |
+| Dependencias | Las librerías que el proyecto necesita; se instalan con `npm ci`. |
+| Metro | El servidor local que inicia Expo para cargar la app mientras desarrollas. |
+| Backend | El servidor que entrega los datos y confirma las operaciones reales. |
+| Datos de muestra | Información ficticia para ver las pantallas; no son datos de producción. |
+| Reseña nativa | El diálogo de calificación que controla Android o iOS. |
+| PNG | El archivo de imagen que se genera al compartir. |
+
+## Referencia técnica para integrar
+
+Puedes empezar con los pasos y mapas de arriba. Abre esta sección cuando necesites
+los comandos adicionales, las limitaciones por plataforma o los archivos concretos.
+
+<details>
+<summary>Ver detalles técnicos, datos de ejemplo y organización del código</summary>
 
 ## Instalación y ejecución
 
@@ -244,3 +449,6 @@ la reseña nativa no disponible y la entrega real mediante WhatsApp.
 
 Una reseña simulada no equivale a una calificación publicada en la tienda, y una
 imagen compartida no confirma un referido ni un pago.
+
+
+</details>
