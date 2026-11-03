@@ -32,11 +32,29 @@ No se debe pedir al usuario que pegue el enlace a mano. Los links, los invitados
 pendientes y los premios **no vencen**. «Por tiempo limitado» se refiere al
 programa, no a una cuenta regresiva individual.
 
+## Cómo probar el modo claro y el modo oscuro
+
+1. En el Home de prueba toca **Cambiar a modo oscuro**. Para regresar al blanco,
+   toca **Cambiar a modo claro**.
+2. Toca **Invitar** y revisa las dos pestañas. En Invitar, toca la miniatura del
+   paso 2 para ampliar la tarjeta; ciérrala con la X.
+3. Al compartir, la tarjeta se genera en el mismo modo que elegiste. En oscuro
+   tiene fondo azul, logo blanco y el globo de Tutu y el panel inferior blancos
+   con letras oscuras. El contenido y su orden son los mismos en ambos modos.
+
+La elección se guarda al cerrar la app y también se usa después de la reseña.
+No hace falta cambiar el tema del teléfono ni usar una URL especial. En la app
+real se conecta con la preferencia de apariencia existente; este botón es para
+que el equipo pueda probar la muestra.
+
+Ver el Home de prueba en [modo claro](docs/screenshots/home-light.png) y en
+[modo oscuro](docs/screenshots/home-dark.png).
+
 ## Mapita 1: entrada desde Home
 
 ```mermaid
 flowchart TD
-    H["Home: solo el botón Invitar"] -->|Toca Invitar| C{"¿Tiene algún invitado?"}
+    H["Home: Invitar y cambio de modo"] -->|Toca Invitar| C{"¿Tiene algún invitado?"}
     C -->|No| I["Pestaña 1: Invitar"]
     C -->|Sí: pagado o pendiente| R["Pestaña 2: Mis referidos"]
     I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
@@ -55,7 +73,7 @@ El recorrido de Home conserva las dos pestañas. La página que se abre depende
 de si ya hay invitados; la muestra de Pedro tiene siete, por eso empieza en
 **Mis referidos**. La vista ampliada se abre desde la lupita de **Invitar**.
 
-<img src="docs/media/flujo-home.gif?v=3" alt="Desde Home con invitados: Mis referidos, cambio a Invitar y tarjeta ampliada" width="360" />
+<img src="docs/media/flujo-home.gif?v=4" alt="Desde Home: cambio a modo oscuro, Mis referidos, Invitar y tarjeta ampliada" width="360" />
 
 [Ver o descargar el video de Home en MP4](docs/media/flujo-home.mp4).
 
@@ -192,8 +210,8 @@ Implementa estas dos entradas:
    y Mis referidos como segunda, con chips, puntos y deslizamiento. Si existe
    al menos un invitado (pagado o pendiente), abrir Mis referidos; si no hay
    ninguno, abrir Invitar.
-   No pedir una reseña en esta entrada. El Home vacío del mini repo solo sirve
-   para demostrar el botón; conserva el Home de la app real.
+   No pedir una reseña en esta entrada. El Home mínimo del mini repo demuestra el botón Invitar y
+   permite cambiar de apariencia para las pruebas; conserva el Home de la app real.
 2. Desde donde la app pide una reseña: usar la solicitud nativa existente y
    después mostrar SOLO Invitar, sin chips, sin puntos y sin deslizamiento.
    Mis referidos no debe quedar accesible con un gesto ni montado como página
@@ -230,7 +248,10 @@ desarrollo; Expo Go solo permite ver la interfaz. Comprueba en WhatsApp que
 el destinatario recibe la imagen con el comentario y el link que puede tocar.
 
 Conserva claro y oscuro en las tres piezas. En la tarjeta oscura: fondo azul,
-logo blanco, globo de Tutu y panel inferior blancos, con texto legible.
+logo blanco, globo de Tutu y panel inferior blancos, con texto oscuro.
+La vista previa y el PNG deben usar la apariencia elegida por el usuario,
+conservándola al volver a abrir la app. Conecta la configuración existente
+de la app real; el botón del Home de esta muestra es para las pruebas.
 En Colombia usa cadena con 1 y cadenas desde 2. Los links, los pendientes y
 los premios no vencen: no agregues plazos, contadores ni estados de vencimiento.
 Usa el mensaje exacto por país de la sección Mensaje de WhatsApp, con montos
@@ -307,6 +328,17 @@ la vista estática ampliada. Cada enlace abre la imagen completa:
 | Colombia · claro | [Ver](docs/screenshots/co-light-invitar.png) | [Ver](docs/screenshots/co-light-tarjeta.png) | [Ver](docs/screenshots/co-light-referidos.png) |
 | Colombia · oscuro | [Ver](docs/screenshots/co-dark-invitar.png) | [Ver](docs/screenshots/co-dark-tarjeta.png) | [Ver](docs/screenshots/co-dark-referidos.png) |
 
+Las tres piezas en **modo oscuro** (Venezuela):
+
+| Invitar | Tarjeta para compartir | Mis referidos |
+| --- | --- | --- |
+| <img src="docs/screenshots/ve-dark-invitar.png" alt="Invitar en modo oscuro" width="240" /> | <img src="docs/screenshots/ve-dark-tarjeta.png" alt="Tarjeta en oscuro con globo y panel blancos" width="240" /> | <img src="docs/screenshots/ve-dark-referidos.png" alt="Mis referidos en modo oscuro" width="240" /> |
+
+Estas capturas se revisaron cambiando el modo desde el botón del Home.
+También puedes [abrir el PNG oscuro generado al compartir](docs/screenshots/ve-dark-tarjeta-compartida.png),
+sin los controles de la vista previa. Se comprobó que mide 1080 × 1920 y que
+cambiar de nuevo a claro genera una tarjeta blanca con el panel azul.
+
 **Pendiente de aceptación:** los videos de entrega real por WhatsApp en ambos
 sistemas. No se marcan como aprobados con pruebas unitarias, Expo Go ni solo
 abriendo el selector del teléfono.
@@ -351,7 +383,7 @@ npm start -- --port 8083
 Incluye Outfit, Tutu animado y estático, medallas oficiales y marca. Las tres
 piezas admiten claro y oscuro. El proveedor de tema conserva la preferencia;
 la app real debe conectar `useAppearance().setAppearance` con su configuración
-existente. El Home de esta muestra mantiene solo el botón Invitar.
+existente. El Home de esta muestra incluye Invitar y un botón para cambiar de modo.
 
 La web y Expo Go permiten revisar la interfaz. No sirven para aceptar el envío
 combinado: no se ofrece una alternativa incompleta de compartir solo texto o imagen.
@@ -360,7 +392,7 @@ combinado: no se ofrece una alternativa incompleta de compartir solo texto o ima
 
 | Entrada | Recorrido actual | Regreso |
 | --- | --- | --- |
-| Desde Home | Home vacío → botón **Invitar** → **Invitar** / **Mis referidos** | Cerrar o volver regresa a Home |
+| Desde Home | Home de prueba → botón **Invitar** → **Invitar** / **Mis referidos** | Cerrar o volver regresa a Home |
 | Desde una solicitud de reseña de la app | Interacción de reseña → solo **Invitar**, sin navegación entre páginas | Cerrar regresa a Home |
 
 **Desde Home**, Invitar es la primera pestaña y Mis referidos es la segunda.
@@ -375,9 +407,10 @@ Invitar, aunque ya tenga invitados.
 
 ### 1. Entrada desde Home
 
-Al iniciar normalmente aparece un Home vacío con un único botón **Invitar**. Es una
-pantalla mínima para demostrar la integración. Al tocar el botón se abren las
-pantallas aprobadas de invitación y referidos.
+Al iniciar normalmente aparece un Home mínimo con **Invitar** y **Cambiar a modo
+oscuro** (o **Cambiar a modo claro**, según el modo actual). El segundo botón solo
+sirve para revisar las dos apariencias en esta muestra. Al tocar **Invitar** se
+abren las pantallas aprobadas de invitación y referidos.
 
 ### 2. Entrada desde la solicitud de reseña
 
@@ -406,7 +439,7 @@ La pantalla **Simulación de reseña** permite elegir estrellas y tocar **Simula
 envío de reseña**, o tocar **Omitir reseña**. Ambas opciones continúan a **Invitar**,
 independientemente de la calificación elegida. Esa invitación usa el modo sin
 pestañas, puntos ni deslizamiento. La simulación no publica ninguna
-calificación en una tienda. Home conserva únicamente su botón de invitar.
+calificación en una tienda. Home conserva Invitar y el botón de cambio de modo.
 
 Para intentar la solicitud nativa de la tienda:
 
@@ -457,7 +490,7 @@ antes de usar esos accesos.
 
 | Parámetro | Qué permite probar |
 | --- | --- |
-| `entry=home` o `tuturnoreferidos://home` | Home con su botón; permite comprobar la selección inicial |
+| `entry=home` o `tuturnoreferidos://home` | Home con Invitar y cambio de modo; permite comprobar la selección inicial |
 | `entry=invite` o `tuturnoreferidos://invite` | Entrada de Home: elige página según los invitados |
 | `entry=referrals` | Fuerza el listado para capturas, incluso vacío |
 | `entry=review` o `tuturnoreferidos://review` | Reseña simulada seguida de invitación sola |
@@ -581,7 +614,7 @@ entorno. La publicación de una versión de producción queda fuera de su alcanc
 App.tsx                              Proveedores; respeta la apariencia elegida
 src/app/MiniApp.tsx                  Coordinación de entradas desde Home y reseña
 src/app/entry.ts                     Lectura de las URL de prueba
-src/features/home/screens/           Home vacío con el botón Invitar
+src/features/home/screens/           Home mínimo con Invitar y cambio de modo
 src/features/referrals/screens/      Páginas aprobadas y simulación de reseña
 src/features/referrals/components/   Invitación, listado, tarjeta, animaciones y controles
 src/features/referrals/domain/       Lecturas, perfil y secuencia de reseña

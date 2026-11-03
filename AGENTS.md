@@ -13,6 +13,7 @@ Read https://docs.expo.dev/versions/v57.0.0/ before writing Expo code.
 - Share PNG plus the approved caption and referral link in a single native request on Android and iOS. Use react-native-share in a development build; never substitute clipboard pasting or an image-only send.
 - Links, pending invitees and rewards never expire. Do not reintroduce deadlines, countdowns or expiration fields/statuses.
 - Support the three pieces in light and dark. Dark sharing card: blue background, white wordmark, white Tutu bubble and bottom panel. Keep official assets.
+- Keep the test Home appearance button available. Persist the chosen mode and use it for both entry paths, the preview and the generated sharing PNG; production integrates its existing appearance setting.
 - Colombia uses cadena for one and cadenas from two; amounts and approved captions come from country configuration.
 - Use the bundled official medals and Tutu; preserve approved copy and spacing.
 - Received SAN count is explicit profile data, independent of referrals/installments.
