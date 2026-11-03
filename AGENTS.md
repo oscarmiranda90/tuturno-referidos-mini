@@ -7,6 +7,7 @@ Read https://docs.expo.dev/versions/v57.0.0/ before writing Expo code.
 - Neutral Spanish UI only; English identifiers, comments and documentation.
 - Home entry: keep Invitar at index 0 and Mis referidos at index 1, with chips, dots and swiping. Open index 1 when there is any invitee (paid or pending); otherwise index 0.
 - Post-review entry: the same invitation content alone, without chips, dots or a pager.
+- Keep the test Home button "Probar flujo de reseña" wired to the existing review demo. Both entry paths must be reachable in the standalone APK without URLs or developer commands.
 - Preserve entry mode until the flow closes. Review skip/unavailable/error also use invite-only mode.
 - Shared design, assets and sharing logic stay in one InvitePage implementation.
 - Mira cómo voy is a static sharing attachment. Its step-2 thumbnail opens an optional full-screen static preview with an X; closing returns to Invitar. It is never a required sharing step.

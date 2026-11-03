@@ -10,13 +10,17 @@ un texto listo para copiar y pegar.
 
 ## Instalar en Android sin compilar
 
-[**Descargar el APK del mini repo**](https://github.com/oscarmiranda90/tuturno-referidos-mini/releases/download/android-demo-v1.0.0/TuTurno-Referidos-Mini-1.0.0.apk)
+[**Descargar el APK del mini repo**](https://github.com/oscarmiranda90/tuturno-referidos-mini/releases/download/android-demo-v1.0.1/TuTurno-Referidos-Mini-1.0.1.apk)
 
 1. Abre ese enlace desde el teléfono Android y descarga el archivo `.apk`.
 2. Toca el archivo descargado y elige **Instalar**. Si Android lo solicita,
    permite la instalación desde el navegador o la aplicación Archivos que estás usando.
 3. Abre **Tu Turno · Referidos**. No necesitas Expo Go, Metro, una computadora
    ni ejecutar comandos.
+4. En el Home elige **Invitar** para la entrada normal o **Probar flujo de reseña**
+   para ver la simulación de calificación y después la invitación sin pestañas.
+   Elige estrellas y toca **Simular envío de reseña**, o toca **Omitir reseña**;
+   ambas opciones continúan al flujo.
 
 Es únicamente la muestra de este repositorio, con datos ficticios, Home mínimo,
 Invitar, Mis referidos y la tarjeta personalizada. Incluye los recursos dentro
@@ -24,7 +28,7 @@ del APK y el botón para cambiar entre claro y oscuro. Para compartir hacia
 WhatsApp, esa aplicación debe estar instalada en el teléfono.
 Esta entrega conserva el **modo oscuro azul actual** del mini repo.
 
-[Ver la versión y los archivos de descarga](https://github.com/oscarmiranda90/tuturno-referidos-mini/releases/tag/android-demo-v1.0.0).
+[Ver la versión y los archivos de descarga](https://github.com/oscarmiranda90/tuturno-referidos-mini/releases/tag/android-demo-v1.0.1).
 
 ## Primero: entiende qué debe pasar
 
@@ -33,6 +37,7 @@ Hay **dos entradas al mismo contenido, con navegación diferente**:
 1. La persona toca **Invitar** desde Home: si ya tiene algún invitado, abre
    **Mis referidos**; si no tiene ninguno, abre **Invitar**.
 2. La app solicita una **reseña** y después abre **Invitar sin pestañas**.
+   En esta muestra se inicia tocando **Probar flujo de reseña** en el Home.
 
 | Desde dónde entras | Qué aparece | Cómo navegas |
 | --- | --- | --- |
@@ -72,7 +77,7 @@ Ver el Home de prueba en [modo claro](docs/screenshots/home-light.png) y en
 
 ```mermaid
 flowchart TD
-    H["Home: Invitar y cambio de modo"] -->|Toca Invitar| C{"¿Tiene algún invitado?"}
+    H["Home: Invitar, reseña de prueba y cambio de modo"] -->|Toca Invitar| C{"¿Tiene algún invitado?"}
     C -->|No| I["Pestaña 1: Invitar"]
     C -->|Sí: pagado o pendiente| R["Pestaña 2: Mis referidos"]
     I <-->|Selector superior, puntos o deslizar| R["Pestaña 2: Mis referidos"]
@@ -91,13 +96,14 @@ El recorrido de Home conserva las dos pestañas. La página que se abre depende
 de si ya hay invitados; la muestra de Pedro tiene siete, por eso empieza en
 **Mis referidos**. La vista ampliada se abre desde la lupita de **Invitar**.
 
-<img src="docs/media/flujo-home.gif?v=4" alt="Desde Home: cambio a modo oscuro, Mis referidos, Invitar y tarjeta ampliada" width="360" />
+<img src="docs/media/flujo-home.gif?v=5" alt="Desde Home: cambio a modo oscuro, Mis referidos, Invitar y tarjeta ampliada" width="360" />
 
 [Ver o descargar el video de Home en MP4](docs/media/flujo-home.mp4).
 
 **Qué debes observar al probarlo:**
 
-- Desde Home no se pide una reseña.
+- El botón **Invitar** del Home no pide una reseña. **Probar flujo de reseña**
+  abre la otra entrada de demostración.
 - Sin invitados se abre **Invitar**; con uno o más, pagados o pendientes, **Mis referidos**.
 - El orden del selector no cambia: Invitar a la izquierda, Mis referidos a la derecha.
 - Puedes cambiar de pestaña tocando los chips, los puntos o deslizando.
@@ -113,6 +119,7 @@ de si ya hay invitados; la muestra de Pedro tiene siete, por eso empieza en
 flowchart TD
     F["A futuro: pantalla de día de cobro"] -.-> E
     E["Hoy: la app llega al punto donde solicita una reseña"] --> Q["Solicitud de reseña"]
+    D["Home de prueba: Probar flujo de reseña"] --> Q
     Q -->|Termina la interacción| I["Invitar: sin chips, puntos ni deslizamiento"]
     Q -->|Se omite, no aparece o falla| I
     I -->|Lupita| P["Tarjeta estática en grande"]
@@ -121,11 +128,13 @@ flowchart TD
     I -->|Cerrar| H["Home"]
 ```
 
+En el APK, toca **Probar flujo de reseña** en el Home para iniciar este recorrido.
+
 Grabación de este recorrido en Android: después de la **simulación de reseña**
 se abre la invitación sola, sin chips, sin puntos y sin cambio de página al
 deslizar. También se muestra la generación de la imagen para compartir.
 
-<img src="docs/media/flujo-resena.gif?v=3" alt="Después de la reseña: invitación sola sin pestañas ni deslizamiento, y generación de la imagen para compartir" width="360" />
+<img src="docs/media/flujo-resena.gif?v=4" alt="Desde el botón Probar flujo de reseña del Home: calificación y después invitación sola, sin pestañas" width="360" />
 
 [Ver o descargar el video de la reseña en MP4](docs/media/flujo-resena.mp4).
 
@@ -228,8 +237,8 @@ Implementa estas dos entradas:
    y Mis referidos como segunda, con chips, puntos y deslizamiento. Si existe
    al menos un invitado (pagado o pendiente), abrir Mis referidos; si no hay
    ninguno, abrir Invitar.
-   No pedir una reseña en esta entrada. El Home mínimo del mini repo demuestra el botón Invitar y
-   permite cambiar de apariencia para las pruebas; conserva el Home de la app real.
+   No pedir una reseña en esta entrada. El Home mínimo del mini repo ofrece Invitar, Probar flujo de reseña y
+   cambio de apariencia para las pruebas; conserva el Home de la app real.
 2. Desde donde la app pide una reseña: usar la solicitud nativa existente y
    después mostrar SOLO Invitar, sin chips, sin puntos y sin deslizamiento.
    Mis referidos no debe quedar accesible con un gesto ni montado como página
@@ -328,6 +337,9 @@ Para cerrar la integración, adjunta:
 
 - `npm run check`: tipos, estructura, formato, español y pruebas de regresión.
 - Compilaciones nativas y apertura de la app en Android e iOS.
+- APK 1.0.1: ambas entradas accesibles por botones del Home, sin enlaces especiales;
+  probado el envío simulado con 2 estrellas y la opción Omitir reseña.
+  Después abre solo Invitar; la entrada normal conserva las dos pestañas.
 - PNG exportado: **1080 × 1920** comprobado en los archivos de ambos sistemas.
 - [Selector nativo Android con imagen, texto aprobado y link](docs/screenshots/android-compartir.png).
 - [Selector nativo iOS con el PNG](docs/screenshots/ios-compartir.png). El código
@@ -401,7 +413,7 @@ npm start -- --port 8083
 Incluye Outfit, Tutu animado y estático, medallas oficiales y marca. Las tres
 piezas admiten claro y oscuro. El proveedor de tema conserva la preferencia;
 la app real debe conectar `useAppearance().setAppearance` con su configuración
-existente. El Home de esta muestra incluye Invitar y un botón para cambiar de modo.
+existente. El Home de esta muestra incluye Invitar, Probar flujo de reseña y el botón para cambiar de modo.
 
 La web y Expo Go permiten revisar la interfaz. No sirven para aceptar el envío
 combinado: no se ofrece una alternativa incompleta de compartir solo texto o imagen.
@@ -425,10 +437,10 @@ Invitar, aunque ya tenga invitados.
 
 ### 1. Entrada desde Home
 
-Al iniciar normalmente aparece un Home mínimo con **Invitar** y **Cambiar a modo
-oscuro** (o **Cambiar a modo claro**, según el modo actual). El segundo botón solo
-sirve para revisar las dos apariencias en esta muestra. Al tocar **Invitar** se
-abren las pantallas aprobadas de invitación y referidos.
+Al iniciar normalmente aparece un Home mínimo con **Invitar**, **Probar flujo de
+reseña** y **Cambiar a modo oscuro** (o **Cambiar a modo claro**, según el modo
+actual). Al tocar **Invitar** se abren las pantallas aprobadas de invitación y
+referidos. Los otros botones permiten probar la segunda entrada y la apariencia.
 
 ### 2. Entrada desde la solicitud de reseña
 
@@ -436,7 +448,12 @@ abren las pantallas aprobadas de invitación y referidos.
 esta entrada comienza **desde donde se solicita la reseña**, sin pasar por una
 celebración de cobro, un comprobante, una transferencia o una confirmación de pago.
 
-Para probar una reseña simulada de forma reproducible:
+En el APK basta con tocar **Probar flujo de reseña** en el Home. No hace falta
+ningún enlace especial. Esto abre **Simulación de reseña**; al simular el envío
+o al omitirla, se muestra solo Invitar, sin chips, puntos ni deslizamiento.
+
+Para quien trabaja con el código, también se puede iniciar directamente en la
+reseña simulada de forma reproducible:
 
 ```sh
 npm run start:review
@@ -457,7 +474,7 @@ La pantalla **Simulación de reseña** permite elegir estrellas y tocar **Simula
 envío de reseña**, o tocar **Omitir reseña**. Ambas opciones continúan a **Invitar**,
 independientemente de la calificación elegida. Esa invitación usa el modo sin
 pestañas, puntos ni deslizamiento. La simulación no publica ninguna
-calificación en una tienda. Home conserva Invitar y el botón de cambio de modo.
+calificación en una tienda. Home conserva Invitar, Probar flujo de reseña y el botón de cambio de modo.
 
 Para intentar la solicitud nativa de la tienda:
 
@@ -508,7 +525,7 @@ antes de usar esos accesos.
 
 | Parámetro | Qué permite probar |
 | --- | --- |
-| `entry=home` o `tuturnoreferidos://home` | Home con Invitar y cambio de modo; permite comprobar la selección inicial |
+| `entry=home` o `tuturnoreferidos://home` | Home con Invitar, reseña de prueba y cambio de modo; permite comprobar la selección inicial |
 | `entry=invite` o `tuturnoreferidos://invite` | Entrada de Home: elige página según los invitados |
 | `entry=referrals` | Fuerza el listado para capturas, incluso vacío |
 | `entry=review` o `tuturnoreferidos://review` | Reseña simulada seguida de invitación sola |
@@ -632,7 +649,7 @@ entorno. La publicación de una versión de producción queda fuera de su alcanc
 App.tsx                              Proveedores; respeta la apariencia elegida
 src/app/MiniApp.tsx                  Coordinación de entradas desde Home y reseña
 src/app/entry.ts                     Lectura de las URL de prueba
-src/features/home/screens/           Home mínimo con Invitar y cambio de modo
+src/features/home/screens/           Home mínimo con Invitar, reseña de prueba y cambio de modo
 src/features/referrals/screens/      Páginas aprobadas y simulación de reseña
 src/features/referrals/components/   Invitación, listado, tarjeta, animaciones y controles
 src/features/referrals/domain/       Lecturas, perfil y secuencia de reseña

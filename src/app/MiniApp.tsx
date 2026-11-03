@@ -65,7 +65,7 @@ export function MiniApp() {
     <View style={[styles.root, { backgroundColor: theme.surface.canvas }]}>
       <StatusBar style={theme.mode === 'dark' ? 'light' : 'dark'} />
       {entry === 'home' ? (
-        <HomeScreen onInvite={() => setEntry('invite')} />
+        <HomeScreen onInvite={() => setEntry('invite')} onReview={() => setEntry('review')} />
       ) : entry === 'review' ? (
         <ReviewScreen
           onDone={() => setEntry('post-review-invite')}
