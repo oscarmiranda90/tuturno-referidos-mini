@@ -8,6 +8,24 @@ los textos, las animaciones, Tutu y las medallas oficiales.
 los datos reales del usuario.** Puedes apoyarte en Claude o Codex: más abajo tienes
 un texto listo para copiar y pegar.
 
+## Instalar en Android sin compilar
+
+[**Descargar el APK del mini repo**](https://github.com/oscarmiranda90/tuturno-referidos-mini/releases/download/android-demo-v1.0.0/TuTurno-Referidos-Mini-1.0.0.apk)
+
+1. Abre ese enlace desde el teléfono Android y descarga el archivo `.apk`.
+2. Toca el archivo descargado y elige **Instalar**. Si Android lo solicita,
+   permite la instalación desde el navegador o la aplicación Archivos que estás usando.
+3. Abre **Tu Turno · Referidos**. No necesitas Expo Go, Metro, una computadora
+   ni ejecutar comandos.
+
+Es únicamente la muestra de este repositorio, con datos ficticios, Home mínimo,
+Invitar, Mis referidos y la tarjeta personalizada. Incluye los recursos dentro
+del APK y el botón para cambiar entre claro y oscuro. Para compartir hacia
+WhatsApp, esa aplicación debe estar instalada en el teléfono.
+Esta entrega conserva el **modo oscuro azul actual** del mini repo.
+
+[Ver la versión y los archivos de descarga](https://github.com/oscarmiranda90/tuturno-referidos-mini/releases/tag/android-demo-v1.0.0).
+
 ## Primero: entiende qué debe pasar
 
 Hay **dos entradas al mismo contenido, con navegación diferente**:
